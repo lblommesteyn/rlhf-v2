@@ -1,0 +1,578 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Reinforcement Learning Feedback</title>
+        <style>
+        @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+
+        body {
+            background-color: #f4f7fc;
+            font-family: "Open Sans", sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f7fc;
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .classificationDropdown, .nameInput {
+            margin-bottom: 10px;
+            display: block;
+            width: fit-content;
+        }
+
+        .submitFeedback, .submitName {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        </style>
+        <script>
+            let jsonData = [
+    {
+        "paragraph": "We\u2019re advancing our course to drive positive action for the planet and people. A better food system means better outcomes for the Earth, and all of us.",
+        "classification": "systems-thinking",
+        "confidence": "95%"
+    },
+    {
+        "paragraph": "By becoming better ourselves, we can help build a stronger, more sustainable future for us all. pep+ guides our business \u2014 how we operate within planetary boundaries and inspire positive change for the planet and people.",
+        "classification": "systems-thinking",
+        "confidence": "90%"
+    },
+    {
+        "paragraph": "We\u2019re evolving how we source our ingredients and make and sell our products, and how we inspire people through our brands.",
+        "classification": "systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "2022\u2019s fantastic results demonstrate that even in the most trying of times, the investments we have made and our commitment to pep+ are helping us win in the marketplace and create value for our shareholders, as well as our consumers, customers, associates, and communities.",
+        "classification": "systems-thinking",
+        "confidence": "90%"
+    },
+    {
+        "paragraph": "To be an even Better company, we are striving to create growth and value by operating within planetary boundaries and inspiring positive change for the planet and people. The power that we have as individuals and as a collective group to make an impact in our communities is massive. We know that by doing what\u2019s right for society and the environment, we can position ourselves as a consistent top market performer, generating stronger and more loyal connections with our consumers and customers, engaging more meaningfully with our associates, and building deeper roots in our communities to help them prosper over the long term.",
+        "classification": "systems-thinking",
+        "confidence": "95%"
+    },
+    {
+        "paragraph": "This strategic, end-to-end focus has enabled us to make visible progress across the three pillars of pep+: Positive Agriculture, Positive Value Chain, and Positive Choices.",
+        "classification": "systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "We are working to spread regenerative practices to help restore the earth across 7 million acres\u2014land approximately equal to the company\u2019s entire agricultural footprint; sustainably source key crops and ingredients; and help improve the livelihoods of more than 250,000 people in our agricultural supply chain and communities, all by 2030.",
+        "classification": "systems-thinking",
+        "confidence": "90%"
+    },
+    {
+        "paragraph": "Announcing plans for PepsiCo Europe that aim to eliminate virgin fossil-based plastic in all its crisp and chip bags by 2030, which will apply to brands including Walkers, Doritos, and Lay\u2019s. We expect to deliver by using 100% recycled or renewable plastic.",
+        "classification": "systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "Transforming our Frito-Lay facility in Modesto, California, into a role model for end-to-end sustainability. The facility uses 100% sustainably sourced potatoes under PepsiCo\u2019s Sustainable Farming Program and has achieved a 91% reduction in greenhouse gas emissions from direct fleet operations by switching to zero-emission and near zero-emission vehicles\u2014including the world\u2019s first fleet of electric semi trucks from Tesla. We also built fueling and charging infrastructure for the new fleet, with on-site renewable energy generation and storage.",
+        "classification": "systems-thinking",
+        "confidence": "95%"
+    },
+    {
+        "paragraph": "Thanks to pep+, our strong brands, our market positions, our global strategy, and our incredible team of associates, we have been able to deliver short-term results, whilst laying the foundation for long-term, sustainable growth.",
+        "classification": "systems-thinking",
+        "confidence": "90%"
+    },
+    {
+        "paragraph": "Raising the bar in our pep+ transformation, with focus on our portfolio, our DE&I agenda, our communities, and the environment.",
+        "classification": "systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "Leveraging the power of our brands to meet consumer demand for more sustainable packaging. We currently offer reuse models in more than 80 markets, including: SodaStream, SodaStream Professional, Gatorade Gx, fountain beverages, returnable glass and plastic bottles, and concentrates and powders.",
+        "classification": "non-systems-thinking",
+        "confidence": "90%"
+    },
+    {
+        "paragraph": "As we advance our pep+ journey, we know that being a Better company also means continuing to invest in our communities.",
+        "classification": "systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "Opening our hearts and our homes to provide necessities and shelter to our Ukrainian colleagues when their lives were turned upside down by the deadly conflict. We also contributed nearly $15 million to relief efforts through donations from the business, our associates, and the PepsiCo Foundation.",
+        "classification": "systems-thinking",
+        "confidence": "95%"
+    },
+    {
+        "paragraph": "Establishing a new global packaging goal for 20% of beverage servings to be delivered through reusable models by 2030. We intend to work toward this goal by expanding our SodaStream business, building out our refillable offerings, growing our fountain drinks business with reusable cups, and accelerating growth in powders and tablets.",
+        "classification": "systems-thinking",
+        "confidence": "90%"
+    },
+    {
+        "paragraph": "Continuing to advance the five-year \u201cInvesting in Women to Strengthen Supply Chains\u201d Global Development Alliance with the U.S. Agency for International Development. This includes training women on overall farm management as a business, so they can make informed decisions about investment; improving agronomic skills critical for the sustainable or regenerative agriculture transition; building women up to be lead farmers; and improving working conditions. The program is currently operating in Colombia, Pakistan, India, and Vietnam and will soon launch in Peru.",
+        "classification": "systems-thinking",
+        "confidence": "90%"
+    },
+    {
+        "paragraph": "Elevating external strategic partnerships with Archer Daniels Midland Company (ADM) to scale regenerative agriculture practices across our shared supply chains, up to 2 million acres in the U.S., and with N-Drip to scale micro irrigation technology to provide water-saving, crop-enhancing benefits to farmers around the world.",
+        "classification": "non-systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "At the end of 2021, we took our ambitions a step further, launching PepsiCo Positive (pep+), a strategic end-to-end business transformation designed to drive long-term sustainable business performance and value, with sustainability and human capital at the center.",
+        "classification": "systems-thinking",
+        "confidence": "90%"
+    },
+    {
+        "paragraph": "Despite another dynamic period that featured difficult and unpredictable circumstances, we delivered our best financial performance in a decade, whilst staying true to our values and continuing to build a strong, durable foundation for long-term growth\u2014proof that we can deliver sustainable performance, even as we transform our business to meet the challenges of the future.",
+        "classification": "systems-thinking",
+        "confidence": "90%"
+    },
+    {
+        "paragraph": "In July 2022, we issued a new $1.25 billion 10-year Green Bond, which will focus on investments to advance key environmental sustainability initiatives under two pillars of our pep+ agenda: Positive Agriculture and Positive Value Chain.",
+        "classification": "systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "In October 2022, we published our third and final annual Green Bond Report on our 2019 Green Bond, describing our use of proceeds. As of December 31, 2021, we have fully allocated the $974 million in net proceeds from the issuance in 2019 of our first Green Bond to Eligible Green Projects.",
+        "classification": "systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "In October, the Baltimore Ravens and Coca-Cola Consolidated teamed up with Prison Fellowship, the nation\u2019s largest Christian non-profit advocating for and serving prisoners, former prisoners and their families. 100 campers spent the day at the Ravens training facility learning football skills. Each guest was treated to thirst-quenching Coke products and a swag bag with a free pair of sneakers.",
+        "classification": "non-systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "In recognition of Veterans Day, Coke Consolidated partnered with the Independence Fund to renovate the home of a well-deserving hero in Richmond, Virginia. 76-year-old Melvin Washington served from 1966-1968 as a Marine in Vietnam. 35 teammates, including some of our own veterans, spent a week making repairs to his roof and renovating his access ramp.",
+        "classification": "systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "One of the ways we celebrated Women\u2019s History Month was by serving lunch at the Salvation Army and providing necessary supplies for women moving into stable housing. We also presented the organization a check to help women at the Center For Hope in Charlotte.",
+        "classification": "systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "From Nashville to North Carolina, Coke Consolidated helped students and teachers get back to school by stuffing backpacks and distributing them to schools across our territory. For example, in Charlotte, we partnered with the Hornets to pack 2,000 backpacks and 275 teacher totes at the Spectrum Center.",
+        "classification": "systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "Coca-Cola was honored with the designation of the Official Soft Drink of Memphis. To celebrate, Coke Consolidated teamed up with BODYARMOR and basketball star Ja Morant to unveil more than a dozen refurbished basketball courts throughout the city.",
+        "classification": "systems-thinking",
+        "confidence": "90%"
+    },
+    {
+        "paragraph": "Our Refresh. Recycle. Renew. Initiative is comprised of three focus pillars: package recycling; water leadership; and climate protection designed to promote industry-leading sustainability solutions and best practices.",
+        "classification": "systems-thinking",
+        "confidence": "90%"
+    },
+    {
+        "paragraph": "We partnered with North Carolina-based PET reprocessing innovators R3CYCLE to enable bottle-to-bottle recycling across our 14-state territory. We aspire to collect and recycle the equivalent of every bottle we sell by 2030.",
+        "classification": "systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "Coca-Cola continues to make its packaging more sustainable. In 2021, we introduced the world\u2019s first bottle made completely of plant-based plastic, including the cap and label. Plant-based packaging helps us reach our goal of making 100% of our cans and bottles recyclable while reducing our dependency on virgin, fossil material.",
+        "classification": "systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "This year, Sprite transitioned all plastic PET packaging from its signature green bottle to clear. Green PET is recyclable, but often ends up in single-use plastics. Taking color out of bottles improves the quality of the recycled material, keeping more bottles in the circular economy.",
+        "classification": "systems-thinking",
+        "confidence": "85%"
+    },
+    {
+        "paragraph": "We are committed to sustainable business practices that reduce harmful outputs and conserve our planet\u2019s resources. BUILDING BETTER PLANTS We aim to reduce our absolute emissions by 20%. Energy reduction projects implemented to date include upgrades to LED lighting in more than 80% of our manufacturing facilities. The installation of blow mold bottle production will help reduce emissions from shipping empty bottles as will light-weighting 12oz bottles and caps at all locations. We traded trash compactors for energy incinerators at all production facilities to prevent 487 tons of emissions and create 198 MWH of renewable energy or power for 19 homes per year.",
+        "classification": "systems-thinking",
+        "confidence": "90%"
+    },
+    {
+        "paragraph": "POSITIVE AGRICULTURE",
+        "classification": "non-systems-thinking",
+        "confidence": "70%"
+    },
+    {
+        "paragraph": "We\u2019re working to source our crops and ingredients in ways that help restore the earth and strengthen farming communities.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "100% of our grower-sourced crops (potatoes, whole corn, and oats) are sustainably sourced in 30 countries, and more than 90% of these crops are sustainably sourced globally as of 2022",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "We maintained 100% Roundtable on Sustainable Palm Oil (RSPO) physically certified palm oil 2",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "We maintained 100% Bonsucro certified sustainable cane sugar globally 3",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "We\u2019re inspiring people through our brands to make choices that create more smiles for them and the planet.",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "We are almost 80% of the way toward our 2025 targets in reducing added sugars, sodium, and saturated fat across our beverage and convenient foods portfolio",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "We\u2019re helping build a circular and inclusive value chain.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "In 2022, we continued to work toward our goal of 100% renewable electricity in our direct operations, and approximately 65% of our global electricity needs were met by renewable sources 5",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "In December 2022, we set a new packaging goal for 20% of beverage servings to be delivered through reusable models by 2030",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "As of 2022, our operational water-use efficiency improved by 22% in high water-risk areas vs. 2015 baseline, approaching our goal of 25% improvement by 2025",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "As of 2022, we increased our Black and Hispanic managerial populations in the U.S. to 9.0% and 10.1%, respectively, of our workforce",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "Women hold 44% of our global manager positions and continue to be paid within 1% of men",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "In addition to continuing our strong financial performance, we\u2019ve demonstrated an ability to lead with growth and win in the market.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "Continued to meet consumers\u2019 needs and improve the consumer experience, making meaningful progress on all key portfolio transformation bets and with significant growth in more nutritious snacking and zero sugar platforms.",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "To be an even Stronger company, we are continuing to transform our capabilities, cost, and culture, especially through innovation and by putting data at the center of our business. We also want our associates to continue to feel proud of our company and engaged with what we are doing.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "7 million acres\u2014land approximately equal to the company\u2019s entire agricultural footprint; sustainably source key crops and ingredients; and help improve the livelihoods of more than 250,000 people in our agricultural supply chain and communities, all by 2030.",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "Granting funding to 14 projects in 11 countries through our Positive Agriculture Outcomes Fund, helping to tackle some of the most difficult challenges facing agriculture today",
+        "classification": "systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "We are helping to build a circular and inclusive value chain through actions designed to achieve Net-Zero emissions by 2040, become Net Water Positive by 2030, and help build a world where packaging never becomes waste. As part of this, we are adopting new models and decoupling environmental impact from business growth.",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "22 markets have at least one product packaged with 100% recycled PET (rPET)",
+        "classification": "systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "Advancing our Diversity, Equity & Inclusion (DE&I) agenda around our people, business partnerships, and the communities we serve. We have reached 44% gender parity in management globally, whilst increasing U.S. Black and Hispanic representation at the manager level to 9.0% and 10.1%, respectively. We are also expanding our efforts to support historically marginalized communities around the world by increasing diverse representation, supporting our business partners, and helping to create economic opportunity in communities",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "We\u2019re inspiring people through our brands to make choices that help create better outcomes for them and the planet. That means continuing to expand portfolio offerings with less added sugar, sodium, and saturated fat, whilst driving new packaging solutions across beverages and convenient foods",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "Advancing more nutritious snacking platforms with significant growth in North America driven by brands like PopCorners, SunChips, and Bare, whilst launching the national expansion of PopCorners in the U.K.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "Using more diverse ingredients such as legumes, whole grains, plant-based proteins, fruits and vegetables, and nuts and seeds. This includes launching SunChips Black Beans, a new variety made with whole grains and real black beans, and new Quaker Oats flavor offerings with 100% whole grain oats",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "Advancing against our added sugars reduction goal, with Pepsi Zero Sugar now available in 110 international markets and growth in other zero sugar products",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "Launching One Smile at a Time, our global employee volunteering platform, across nearly all of our top 20 markets, empowering our associates to impact their communities at scale. In 2022, we delivered more than 290,000 hours of service through the platform",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "Continuing to make a difference for people around the world through the PepsiCo Foundation by helping increase equitable access to safe water; funding nearly 1,800 scholarships for Black and Hispanic students through the Uplift Community College Scholarship Program; and helping increase food security, delivering more than 20 million meals in 2022 alone.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "We delivered our best financial performance in a decade, whilst staying true to our values and continuing to build a strong, durable foundation for long-term growth.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "Each example of our success is one piece of a much bigger transformation. A transformation that began in 2019, when we launched our effort to become Faster, Stronger, and Better and turn a good company into a great one. That continued to unfold in 2020 and 2021, when we proved we have the right strategy and the right people. And that accelerated in 2022, a year when we showed the world something new: that it is possible for a large, global company to perform and transform at the same time.",
+        "classification": "systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "Keeping our categories very relevant to consumers and accelerating our share gains in our key markets",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "Building high flexibility, agility, and resilience in our planning processes to allow us to pivot quickly as the world changes around us.",
+        "classification": "systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "We are also focused on the safety of our associates in Ukraine and have provided humanitarian aid, goods and services to support our people and communities facing the ongoing deadly conflict.",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "Our focus has been on developing new delivery-system applications, sales-demand planning, production planning, inventory and warehouse management systems, and upgraded core financial systems.",
+        "classification": "non-systems-thinking",
+        "confidence": "70%"
+    },
+    {
+        "paragraph": "We remain focused on identifying opportunities to increase the use of resources to improve results, while streamlining operations to reduce inefficiencies.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "Our Company\u2019s mission statement sets an ambitious goal \u2013 to make, sell, and deliver soft drinks better than anyone else. To be the best Coca-Cola bottler we can be, we will have to continue to improve our manufacturing, selling, and delivery capabilities. We remain committed to achieving that goal.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "These positive outcomes were made possible by our team\u2019s highly effective execution across all aspects of our business. This success has enabled us to continue to strengthen our balance sheet through debt reduction, reward and recognize our teammates, invest in our business and serve our communities.",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "In 2022, our company continued its rich legacy of building better futures for our teammates and the communities we serve. Specific actions included the introduction of our Hope Scholarship, a new program that will provide financial support for education to a growing number of our teammates and their family members. It also included further evolution of our diversity, equity, and inclusion \u201cSeat at the Table\u201d framework, giving teammates a voice through communications, celebrations, and resources that spur understanding and constructive dialogue. We also expanded health and wellness benefits and increased vacation time for teammates.",
+        "classification": "systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "Through our volunteerism and philanthropic contributions, Coke Consolidated supported hundreds of communities with food, shelter, clothing, educational and spiritual growth opportunities. This type of support has been, and will continue to be, a hallmark of our company\u2019s presence in each community we serve.",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "Our brand is now global, our route now encompasses 14 states, and we work to make a positive impact for our communities, our teammates, our customers, and our shareholders.",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "In July, Eastern Kentucky was deluged with historic flooding that took 37 lives. Scorching heat, steady rain, and impassable roads made for a desperate situation. Coke Consolidated\u2019s Response Team immediately hit the ground clearing debris and providing clean drinking water to help impacted teammates and community members.",
+        "classification": "systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "For 120 years, our teammates have woken up every day to make a difference in the world around them. We\u2019re a team of servant leaders guided by our Purpose, giving back to the communities where we live and serve, and helping each other succeed at work and at home.",
+        "classification": "systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "In 2021, Coke Consolidated announced the Hope Scholarship to help teammates and their immediate family members pursue their purpose and passion. This year, 32 teammates across our territory were honored with an inaugural scholarship, which offers financial support in pursuit of a license, certification, or two-to-four-year college degree of their choice.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "This year more than 20 students completed Coke Consolidated\u2019s applied learning program helping grow skills and build confidence by leading projects. Projects in marketing, corporate communications, sales, and manufacturing allowed students to build lasting relationships within the company and with our partners.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "One of the ways we provide opportunities for our teammates to learn, grow, and achieve their careers' goals is through a 10-month leadership training program. 25 participants worked on five different high-impact business challenges: communication and collaboration; attracting and retaining talent; innovation; reaching the customer; and further developing our Environmental, Social, Governance strategies. This latest group of Servant Leaders graduated on May 4th at the University of South Carolina\u2019s Darla Moore School of Business.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "In November, we announced a commitment to fund apprenticeships through Central Piedmont Community College in Charlotte. Coke Consolidated will support up to 30 candidates financially as they pursue certification in fields ranging from HVAC repair to manufacturing.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "We promoted minority and diversity-owned businesses and featured personal stories from our teammates fostering a sense of belonging. By elevating diverse voices, we highlight the unique perspectives everyone brings to their seat at the table.",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "Ten elite students from Historically Black Colleges and Universities were invited to engage with our company leaders, learn new business skills, and experience our purpose and culture firsthand during the week-long SOAR program. Students have the potential to become part of the Coke Consolidated family as future full-time teammates.",
+        "classification": "non-systems-thinking",
+        "confidence": "80%"
+    },
+    {
+        "paragraph": "We\u2019re constantly forging innovative partnerships, driving brand awareness, and creating goodwill alongside The Coca-Cola Company and more than 45 strategic customer connections, including professional sports teams, colleges, universities, and theme parks. In 2022, we became the official soft drink of Charlotte\u2019s professional soccer club, and we extended our Founding Level Partnership with the Charlotte Hornets and introduced Dr Pepper as the lead brand.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "We created 16 closed-loop economies throughout our territory. Our efforts in 2022 resulted in nearly 285 million bottles being collected and made into new bottles.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "We teamed up with Giant Food to clean up Oxon Creek in Washington D.C.\u2019s 8th Ward. Volunteers cleared tires, household items, and other litter from this important waterway.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "To be an even Faster company, we are focusing our efforts on continually winning in the marketplace, finding ways to be even more consumer-centric, and accelerating investment for top-line growth, including by pivoting our portfolio.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "Since then, pep+ has become the North Star for how we want to win in the marketplace, how we want to transform, and how we want to create value for ourselves and others. To make this clear, we elevated it to be part of our overarching vision: to be the global leader in beverages and convenient foods by Winning with pep+.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "Setting high ambitions in cost transformation and elevating our focus on cost control in every Business Unit",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "We believe we are well-positioned to lead this change",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "by building on the work your Company has already undertaken in product innovation, process innovation and redesign, information systems enhancements, resource efficiency and a relentless focus on our Coca-Cola franchise sales business.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "Our new business initiatives are designed to leverage our core competencies and complement our Coca-Cola franchise sales business. We anticipate these new business initiatives will provide tangible financial results during the next three to 10 years. Having said that, our primary focus and commitment is to the Coca-Cola franchise sales business.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    },
+    {
+        "paragraph": "For example, we invested approximately $240 million in 2022 primarily focused on enhancing efficiency and increasing capacity across our 14-state territory. These investments included a 350,000-square-foot distribution center in Chesterfield, Virginia and automated packaging technologies at our facilities in Charlotte, Indianapolis and Sandston, Virginia.",
+        "classification": "non-systems-thinking",
+        "confidence": "75%"
+    }
+]
+; // Initialize as an empty array or with your data
+            let currentParagraphIndex = 0; // Initialize the index
+
+            document.addEventListener('DOMContentLoaded', function() {
+                loadParagraph(currentParagraphIndex);
+                updateIndexSelector(); // Populate the index selector
+
+                document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+                    event.preventDefault(); // Prevent form from actual submission and page reload
+                    submitFeedback();
+                });
+
+                document.getElementById('jsonIndexSelector').addEventListener('change', function() {
+                    currentParagraphIndex = parseInt(this.value);
+                    loadParagraph(currentParagraphIndex);
+                });
+            });
+
+            function updateIndexSelector() {
+                const selector = document.getElementById('jsonIndexSelector');
+                selector.innerHTML = ''; // Clear existing options
+                jsonData.forEach((_, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.text = `Paragraph ${index + 1}`;
+                    selector.appendChild(option);
+                });
+            }
+
+            function loadParagraph(index) {
+                if (!jsonData.length || index < 0 || index >= jsonData.length) {
+                    const container = document.getElementById('paragraphContainer');
+                    container.innerHTML = '<p>No paragraph available.</p>';
+                    return;
+                }
+
+                const item = jsonData[index];
+                const container = document.getElementById('paragraphContainer');
+                container.innerHTML = `
+                    <p>Paragraph ${index + 1} of ${jsonData.length}:</p>
+                    <p>${item.paragraph}</p>
+                    <p>Classification: ${item.classification}</p>
+                    <p>Confidence: ${item.confidence}</p>
+                    <hr>`;
+            }
+
+            function submitFeedback() {
+                const feedback = document.getElementById('feedback').value;
+                const name = document.getElementById('name').value;
+
+                if (!feedback || !name) {
+                    alert('Please fill in both feedback and name fields.');
+                    return;
+                }
+
+                // Simulate a successful submission without making an actual network request
+                setTimeout(() => {
+                    alert('Feedback submitted successfully.');
+
+                    // After simulating feedback submission, increment the index and load the next paragraph
+                    currentParagraphIndex = (currentParagraphIndex + 1) % jsonData.length;
+                    loadParagraph(currentParagraphIndex);
+                    document.getElementById('jsonIndexSelector').value = currentParagraphIndex;
+                }, 500); // Simulate a short delay to make it feel more realistic
+            }
+        </script>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Reinforcement Learning Feedback</h1>
+            <div id="paragraphContainer">
+                <!-- Paragraph will be loaded here -->
+            </div>
+            <form id="feedbackForm">
+                <label for="jsonIndexSelector">Select Paragraph:</label>
+                <select id="jsonIndexSelector" name="jsonIndexSelector" class="classificationDropdown"></select>
+                <br>
+                <label for="feedback">Provide Feedback:</label>
+                <select class="classificationDropdown" id="feedback" name="feedback">
+                    <option value="agree">Agree</option>
+                    <option value="disagree">Disagree</option>
+                </select>
+                <button class="submitFeedback" type="submit">Submit</button>
+                <br>
+                <label for="name">Your Name:</label>
+                <input type="text" id="name" name="name" class="nameInput">
+            </form>
+        </div>
+    </body>
+    </html>
