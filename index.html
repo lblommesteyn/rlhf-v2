@@ -1,578 +1,802 @@
-    <!DOCTYPE html>
-    <html>
-    <head>
-        <title>Reinforcement Learning Feedback</title>
-        <style>
-        @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reinforcement Learning Feedback</title>
+    <style>
+    @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
 
-        body {
-            background-color: #f4f7fc;
-            font-family: "Open Sans", sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+    body {
+        background-color: #f4f7fc;
+        font-family: "Open Sans", sans-serif;
+        margin: 0;
+        padding: 0;
+    }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f7fc;
-        }
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f4f7fc;
+    }
 
-        h1 {
-            font-size: 24px;
-            margin-bottom: 20px;
-            text-align: center;
-        }
+    h1 {
+        font-size: 24px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
 
-        .classificationDropdown, .nameInput {
-            margin-bottom: 10px;
-            display: block;
-            width: fit-content;
-        }
+    .classificationDropdown, .nameInput {
+        margin-bottom: 10px;
+        display: block;
+        width: fit-content;
+    }
 
-        .submitFeedback, .submitName {
-            background-color: #4caf50;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        </style>
-        <script>
+    .submitFeedback, .submitName {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .markerFeedbackContainer {
+        margin-bottom: 15px;
+    }
+
+    .markerButton {
+        margin-right: 10px;
+    }
+    </style>
+    <script>
             let jsonData = [
     {
-        "paragraph": "We\u2019re advancing our course to drive positive action for the planet and people. A better food system means better outcomes for the Earth, and all of us.",
-        "classification": "systems-thinking",
-        "confidence": "95%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "Our ESG strategy is centered on the concept of creating shared value: we believe we maximize long-term value and create competitive advantage for the Company by serving our stakeholders, including our customers, associates, shareholders, suppliers, business partners, and communities. We believe that addressing such societal needs builds the value of our business, including by enhancing customer and associate trust, creating new revenue streams, managing cost and risk, building capabilities for future advantage, and strengthening the underlying systems we all rely on.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "By becoming better ourselves, we can help build a stronger, more sustainable future for us all. pep+ guides our business \u2014 how we operate within planetary boundaries and inspire positive change for the planet and people.",
-        "classification": "systems-thinking",
-        "confidence": "90%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "Sustainability. Walmart's sustainability efforts focus on our ability to create and preserve long-term value for both people and planet. With respect to people, our sustainability efforts focus on sourcing responsibly, helping prevent forced labor, empowering women, creating inclusive economic opportunity and selling safer, healthier products. With respect to the planet, our efforts aim to enhance the sustainability of product supply chains by reducing emissions, protecting and restoring nature, and reducing waste. To help address the effects of climate change, Walmart has set science-based targets for emissions reduction, including our goal to achieve zero emissions in our operations by 2040—without offsets—and to reduce or avoid one billion metric tons of emissions in our value chain by 2030 under our Project Gigaton™ initiative.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "We\u2019re evolving how we source our ingredients and make and sell our products, and how we inspire people through our brands.",
-        "classification": "systems-thinking",
-        "confidence": "85%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "Community. Walmart aims to serve and strengthen communities by operating our business in a way that meets the needs of our customer and community stakeholder groups, including by providing safer, healthier and more affordable food and other products, disaster support, associate volunteerism, local grant programs and community cohesion initiatives.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "2022\u2019s fantastic results demonstrate that even in the most trying of times, the investments we have made and our commitment to pep+ are helping us win in the marketplace and create value for our shareholders, as well as our consumers, customers, associates, and communities.",
-        "classification": "systems-thinking",
-        "confidence": "90%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "Growth - Provide ongoing growth, development and learning opportunities for associates and continue to attract talent with new skills. We are invested in the growth of our associates in support of our business and their success. We invest in associate development – including new roles and career paths, cross-training, on-the-job learning and coaching, and formal, classroom-style training such as Walmart Academy in the U.S. We also provide access to educational opportunities for our eligible associates through our Live Better U program, which provides a pathway to earn a high school diploma or a college degree at no cost, as well as multiple digital learning opportunities.",
+        "marker1": "Micro Issue How"
     },
     {
-        "paragraph": "To be an even Better company, we are striving to create growth and value by operating within planetary boundaries and inspiring positive change for the planet and people. The power that we have as individuals and as a collective group to make an impact in our communities is massive. We know that by doing what\u2019s right for society and the environment, we can position ourselves as a consistent top market performer, generating stronger and more loyal connections with our consumers and customers, engaging more meaningfully with our associates, and building deeper roots in our communities to help them prosper over the long term.",
-        "classification": "systems-thinking",
-        "confidence": "95%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "The impacts of the COVID-19 pandemic continue to be highly unpredictable and volatile in light of the potential for a resurgence of infection rates or as a result of future mutations, variants, or related strains of the virus. Recent years have demonstrated the widespread and varying impacts of the pandemic on certain business operations, demand for our products and services, in-stock positions, costs of doing business, access to inventory, supply chain operations, the extent and duration of measures to try to contain the virus (such as travel bans and restrictions, quarantines, shelter-in-place orders, business and government shutdowns, and other restrictions on retailers), our ability to predict future performance, exposure to litigation, and our financial performance, among other things.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "This strategic, end-to-end focus has enabled us to make visible progress across the three pillars of pep+: Positive Agriculture, Positive Value Chain, and Positive Choices.",
-        "classification": "systems-thinking",
-        "confidence": "85%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "Other factors and uncertainties include, but are not limited to: the severity and duration of the pandemic, including whether there are additional outbreaks or spikes in the number of COVID-19 cases, future mutations or related strains of the virus in areas in which we and our suppliers operate; further increased operational costs associated with operating during a global pandemic; evolving macroeconomic factors, including general economic uncertainty, unemployment rates, and recessionary pressures; unknown consequences on our business performance and initiatives stemming from the substantial investment of time, capital and other resources to the pandemic response; the effectiveness and extent of administration of vaccinations and medical treatments for COVID-19 or other variants; the pace of recovery when the pandemic subsides; and the long-term impact of the COVID-19 pandemic on our business, including consumer behaviors. These risks and their impacts are difficult to predict and could otherwise disrupt and adversely affect our operations and our financial performance.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "We are working to spread regenerative practices to help restore the earth across 7 million acres\u2014land approximately equal to the company\u2019s entire agricultural footprint; sustainably source key crops and ingredients; and help improve the livelihoods of more than 250,000 people in our agricultural supply chain and communities, all by 2030.",
-        "classification": "systems-thinking",
-        "confidence": "90%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "The occurrence of one or more natural disasters, such as hurricanes, tropical storms, floods, fires, earthquakes, tsunamis, cyclones, typhoons; weather conditions such as major or extended winter storms, droughts and tornadoes, whether as a result of climate change or otherwise; geopolitical events; global health epidemics or pandemics or other contagious outbreaks such as the ongoing COVID-19 pandemic; and catastrophic events, such as war, civil unrest, terrorist attacks or other acts of violence, including active shooter situations (such as those that have occurred in our U.S. stores), in countries in which we operate, in which our suppliers are located, or in other areas of the world (such as in Ukraine where armed hostilities currently exist between Ukraine and Russia) could adversely affect our operations and financial performance.",
+        "marker1": "Macro Issue Why",
+        "marker2": "Micro Issue Why"
     },
     {
-        "paragraph": "Announcing plans for PepsiCo Europe that aim to eliminate virgin fossil-based plastic in all its crisp and chip bags by 2030, which will apply to brands including Walkers, Doritos, and Lay\u2019s. We expect to deliver by using 100% recycled or renewable plastic.",
-        "classification": "systems-thinking",
-        "confidence": "85%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "Such events could result in physical damage to, or the complete loss of, one or more of our properties, the closure of one or more stores, clubs and distribution or fulfillment centers, limitations on store or club operating hours, the lack of an adequate workforce in a market, the inability of customers and associates to reach or have transportation to our stores and clubs affected by such events, the evacuation of the populace from areas in which our stores, clubs and distribution and fulfillment centers are located, the unavailability of our digital platforms to our customers, changes in the purchasing patterns of consumers (including the frequency of visits by consumers to physical retail locations, whether as a result of limitations on large gatherings, travel and movement limitations or otherwise) and in consumers' disposable income, the temporary or long-term disruption in the supply of products from some suppliers, the disruption in the transport of goods from overseas, the disruption or delay in the delivery of goods to our distribution and fulfillment centers or stores within a country in which we are operating, the reduction in the availability of products in our stores, increases in the costs of procuring products as a result of either reduced availability or economic sanctions, increased transportation costs (whether due to fuel prices, fuel supply, or otherwise), the disruption (whether directly or indirectly) of critical infrastructure systems, banking systems, utility services or energy availability to our stores, clubs and our facilities, and the disruption in our communications with our stores, clubs and our other facilities.",
+        "marker1": "Macro Issue Why",
+        "marker2": "Micro Issue Why"
     },
     {
-        "paragraph": "Transforming our Frito-Lay facility in Modesto, California, into a role model for end-to-end sustainability. The facility uses 100% sustainably sourced potatoes under PepsiCo\u2019s Sustainable Farming Program and has achieved a 91% reduction in greenhouse gas emissions from direct fleet operations by switching to zero-emission and near zero-emission vehicles\u2014including the world\u2019s first fleet of electric semi trucks from Tesla. We also built fueling and charging infrastructure for the new fleet, with on-site renewable energy generation and storage.",
-        "classification": "systems-thinking",
-        "confidence": "95%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "Political and economic instability, as well as other impactful events and circumstances in the countries in which our suppliers and their manufacturers are located (such as the ongoing COVID-19 pandemic), the financial instability of suppliers, suppliers' failure to meet our terms and conditions or our supplier standards (including our responsible sourcing standards), labor problems experienced by our suppliers and their manufacturers, the availability of raw materials to suppliers, merchandise safety and quality issues, disruption or delay in the transportation of merchandise from the suppliers and manufacturers to our stores, clubs, and other facilities, including as a result of labor slowdowns at any port at which a material amount of merchandise we purchase enters into the markets in which we operate, currency exchange rates, transport availability and cost, transport security, inflation and other factors relating to the suppliers and the countries in which they are located are beyond our control.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "Thanks to pep+, our strong brands, our market positions, our global strategy, and our incredible team of associates, we have been able to deliver short-term results, whilst laying the foundation for long-term, sustainable growth.",
-        "classification": "systems-thinking",
-        "confidence": "90%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "Furthermore, the long-term impacts of climate change, whether involving physical risks (such as extreme weather conditions, drought, or rising sea levels) or transition risks (such as regulatory or technology changes) are expected to be widespread and unpredictable. Certain impacts of physical risk may include: temperature changes that increase the heating and cooling costs at stores, clubs, and distribution or fulfillment centers; extreme weather patterns that affect the production or sourcing of certain commodities; flooding and extreme storms that damage or destroy our buildings and inventory; and heat and extreme weather events that cause long-term disruption or threats to the habitability of the communities in which Walmart operates. Relative to transition risk, certain impacts may include: changes in energy and commodity prices driven by climate-related weather events; prolonged climate-related events affecting macroeconomic conditions with related effects on consumer spending and confidence; stakeholder perception of our engagement in climate-related policies; and new regulatory requirements resulting in higher compliance risk and operational costs.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "Raising the bar in our pep+ transformation, with focus on our portfolio, our DE&I agenda, our communities, and the environment.",
-        "classification": "systems-thinking",
-        "confidence": "85%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "We bear the risk of losses incurred as a result of physical damage to, or destruction of, any stores, clubs and distribution or fulfillment centers, loss or spoilage of inventory and business interruption caused by such events. These events and their impacts could otherwise disrupt and adversely affect our operations and could materially adversely affect our financial performance.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "Leveraging the power of our brands to meet consumer demand for more sustainable packaging. We currently offer reuse models in more than 80 markets, including: SodaStream, SodaStream Professional, Gatorade Gx, fountain beverages, returnable glass and plastic bottles, and concentrates and powders.",
-        "classification": "non-systems-thinking",
-        "confidence": "90%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "Given the number of individual transactions we have each year, it is crucial that we maintain uninterrupted operation of our business-critical information systems. Our information systems are subject to damage or interruption from power outages, computer and telecommunications failures, computer viruses, worms, other malicious computer programs, denial-of-service attacks, security incidents and breaches (through cyberattacks, which may be from cybercriminals or sophisticated state-sponsored threat actors), catastrophic events such as fires, major or extended winter storms, tornadoes, earthquakes and hurricanes, usage errors by our associates or contractors, civil or political unrest, or armed hostilities. Our information systems are essential to our business operations, including the processing of transactions, management of our associates, facilities, logistics, inventories, physical stores and clubs and our online operations. Our information systems are not fully redundant and our disaster recovery planning cannot account for all eventualities. If our systems are damaged, breached, attacked, or cease to function properly, we may have to make a significant investment to repair or replace them, and may experience loss or corruption of critical data as well as suffer interruptions in our business operations in the interim. Any interruption to our information systems may have a material adverse effect on our business or results of operations. In addition, we frequently update our information technology hardware, software, processes and systems. The risk of system disruption is increased when significant system changes are undertaken. If we fail to timely integrate and update our information systems and processes, we may fail to realize the cost savings or operational benefits anticipated to be derived from these initiatives.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "As we advance our pep+ journey, we know that being a Better company also means continuing to invest in our communities.",
-        "classification": "systems-thinking",
-        "confidence": "85%"
+        "company": "Walmart",
+        "year": "2022",
+        "paragraph": "We, along with other retail companies, are influenced by a number of factors including, but not limited to: catastrophic events, weather and other risks related to climate change, global health epidemics, including the COVID-19 pandemic, competitive pressures, consumer disposable income, consumer debt levels and buying patterns, consumer credit availability, supply chain disruptions, cost and availability of goods, currency exchange rate fluctuations, customer preferences, deflation, inflation, fuel and energy prices, general economic conditions, insurance costs, interest rates, labor availability and costs, tax rates, the imposition of tariffs, cybersecurity attacks and unemployment.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "Opening our hearts and our homes to provide necessities and shelter to our Ukrainian colleagues when their lives were turned upside down by the deadly conflict. We also contributed nearly $15 million to relief efforts through donations from the business, our associates, and the PepsiCo Foundation.",
-        "classification": "systems-thinking",
-        "confidence": "95%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "Costco is continuing work on sustainability initiatives, reflected in our Sustainability Commitment on Costco.com. These include continuing progress on our Climate Action Plan, decreasing packaging and plastics use, utilizing recycled content when available, and being creative in arranging for more products per transport. We have redoubled our efforts related to diversity and inclusion.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "Establishing a new global packaging goal for 20% of beverage servings to be delivered through reusable models by 2030. We intend to work toward this goal by expanding our SodaStream business, building out our refillable offerings, growing our fountain drinks business with reusable cups, and accelerating growth in powders and tablets.",
-        "classification": "systems-thinking",
-        "confidence": "90%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "We believe that our warehouses are among the most productive in the retail industry, owing in substantial part to the commitment and efficiency of our employees. We seek to provide them not merely with employment but careers. Many attributes of our business contribute to the objective; the more significant include: competitive compensation and benefits for those working in our membership warehouses and distributions channels; a commitment to promoting from within; and maintaining a ratio of at least 50% of our employee base being full-time employees. These attributes contribute to what we consider, especially for the industry, a high retention rate. In 2022, in the U.S. that rate was approximately 90% for employees who have been with us for at least one year.",
+        "marker1": "Micro Issue How"
     },
     {
-        "paragraph": "Continuing to advance the five-year \u201cInvesting in Women to Strengthen Supply Chains\u201d Global Development Alliance with the U.S. Agency for International Development. This includes training women on overall farm management as a business, so they can make informed decisions about investment; improving agronomic skills critical for the sustainable or regenerative agriculture transition; building women up to be lead farmers; and improving working conditions. The program is currently operating in Colombia, Pakistan, India, and Vietnam and will soon launch in Peru.",
-        "classification": "systems-thinking",
-        "confidence": "90%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "The commitment to “Take Care of Our Employees” is also the foundation of our approach to diversity, equity and inclusion and creating an inclusive and respectful workplace. In 2022, we appointed a new Chief Diversity and Inclusion Officer. Embracing differences is important to the growth of our Company. It leads to more opportunities, innovation, and employee satisfaction and connects us to the communities where we do business.",
+        "marker1": "Micro Issue Why",
+        "marker2": "Micro Issue How"
     },
     {
-        "paragraph": "Elevating external strategic partnerships with Archer Daniels Midland Company (ADM) to scale regenerative agriculture practices across our shared supply chains, up to 2 million acres in the U.S., and with N-Drip to scale micro irrigation technology to provide water-saving, crop-enhancing benefits to farmers around the world.",
-        "classification": "non-systems-thinking",
-        "confidence": "85%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "In October 2021, we provided an increase of a minimum of $0.50 per hour for U.S. and Canada wage scales. In March 2022, we provided certain compensation increases, including a $0.75 per hour increase to the top of the U.S. wage scales, increased the starting wage to $17.50, and granted our employees one additional day of paid time off. In July 2022, we provided an additional increase to the top of the U.S. wage scales of $0.50 per hour. Costco is firmly committed to helping protect the health and safety of our members and employees and to serving our communities. As the global effect of COVID-19 continues to evolve, we are closely monitoring the changing situation and complying with public health guidance.",
+        "marker1": "Micro Issue How"
     },
     {
-        "paragraph": "At the end of 2021, we took our ambitions a step further, launching PepsiCo Positive (pep+), a strategic end-to-end business transformation designed to drive long-term sustainable business performance and value, with sustainability and human capital at the center.",
-        "classification": "systems-thinking",
-        "confidence": "90%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "Our financial and operational performance is highly dependent on our U.S. and Canadian operations, which comprised 87% and 85% of net sales and operating income in 2022, respectively. Within the U.S., we are highly dependent on our California operations, which comprised 28% of U.S. net sales in 2022. Our California market, in general, has a larger percentage of higher volume warehouses as compared to our other domestic markets. Any substantial slowing or sustained decline in these operations could materially adversely affect our business and financial results. Declines in financial performance of our U.S. operations, particularly in California, and our Canadian operations could arise from, among other things: slow growth or declines in comparable warehouse sales (comparable sales); negative trends in operating expenses, including increased labor, healthcare and energy costs; failing to meet targets for warehouse openings; cannibalizing existing locations with new warehouses; shifts in sales mix toward lower gross margin products; changes or uncertainties in economic conditions in our markets, including higher levels of unemployment and depressed home values; and failing to consistently provide high quality and innovative new products.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "Despite another dynamic period that featured difficult and unpredictable circumstances, we delivered our best financial performance in a decade, whilst staying true to our values and continuing to build a strong, durable foundation for long-term growth\u2014proof that we can deliver sustainable performance, even as we transform our business to meet the challenges of the future.",
-        "classification": "systems-thinking",
-        "confidence": "90%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "We depend on the orderly operation of the merchandise receiving and distribution process, primarily through our depots. We also rely upon processing, packaging, manufacturing and other facilities to support our business, which includes the production of certain private-label items. Although we believe that our operations are efficient, disruptions due to fires, tornadoes, hurricanes, earthquakes, pandemics or other extreme weather conditions or catastrophic events, labor issues or other shipping problems may result in delays in the production and delivery of merchandise to our warehouses, which could adversely affect sales and the satisfaction of our members. Our e-commerce operations depend heavily on third-party and in-house logistics providers and is negatively affected when these providers are unable to provide services in a timely fashion.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "In July 2022, we issued a new $1.25 billion 10-year Green Bond, which will focus on investments to advance key environmental sustainability initiatives under two pillars of our pep+ agenda: Positive Agriculture and Positive Value Chain.",
-        "classification": "systems-thinking",
-        "confidence": "85%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "Our success depends on the continued contributions of our employees, including members of our senior management and other key operations, IT, merchandising and administrative personnel. Failure to identify and implement a succession plan for senior management could negatively impact our business. We must attract, train and retain a large and growing number of qualified employees, while controlling related labor costs and maintaining our core values. Our ability to control labor and benefit costs is subject to numerous internal and external factors, including the continuing impacts of the pandemic, regulatory changes, prevailing wage rates, union relations and healthcare and other insurance costs. We compete with other retail and non-retail businesses for these employees and invest significant resources in training and motivating them. There is no assurance that we will be able to attract or retain highly qualified employees in the future, which could have a material adverse effect on our business, financial condition and results of operations.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "In October 2022, we published our third and final annual Green Bond Report on our 2019 Green Bond, describing our use of proceeds. As of December 31, 2021, we have fully allocated the $974 million in net proceeds from the issuance in 2019 of our first Green Bond to Eligible Green Projects.",
-        "classification": "systems-thinking",
-        "confidence": "85%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "Prices of certain commodities, including gasoline and consumable goods used in manufacturing and our warehouse retail operations, are historically volatile and are subject to fluctuations arising from changes in domestic and international supply and demand, inflationary pressures, labor costs, competition, market speculation, government regulations, taxes and periodic delays in delivery. Rapid and significant changes in commodity prices and our ability and desire to pass them through to our members may affect our sales and profit margins. These factors could also increase our merchandise costs and selling, general and administrative expenses, and otherwise adversely affect our operations and financial results. General economic conditions can also be affected by events like the outbreak of hostilities, including but not limited to the Ukraine conflict, or acts of terrorism.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "In October, the Baltimore Ravens and Coca-Cola Consolidated teamed up with Prison Fellowship, the nation\u2019s largest Christian non-profit advocating for and serving prisoners, former prisoners and their families. 100 campers spent the day at the Ravens training facility learning football skills. Each guest was treated to thirst-quenching Coke products and a swag bag with a free pair of sneakers.",
-        "classification": "non-systems-thinking",
-        "confidence": "85%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "Our suppliers (and those they depend upon for materials and services) are subject to risks, including labor disputes, union organizing activities, financial liquidity, natural disasters, extreme weather conditions, public health emergencies, supply constraints and general economic and political conditions that could limit their ability to timely provide us with acceptable merchandise. One or more of our suppliers might not adhere to our quality control, packaging, legal, regulatory, labor, environmental or animal welfare standards. These deficiencies may delay or preclude delivery of merchandise to us and might not be identified before we sell such merchandise to our members. This failure could lead to recalls and litigation and otherwise damage our reputation and our brands, increase costs, and otherwise adversely impact our business.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "In recognition of Veterans Day, Coke Consolidated partnered with the Independence Fund to renovate the home of a well-deserving hero in Richmond, Virginia. 76-year-old Melvin Washington served from 1966-1968 as a Marine in Vietnam. 35 teammates, including some of our own veterans, spent a week making repairs to his roof and renovating his access ramp.",
-        "classification": "systems-thinking",
-        "confidence": "85%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "Natural disasters and extreme weather conditions, including those impacted by climate change, such as hurricanes, typhoons, floods, earthquakes, wildfires, droughts; acts of terrorism or violence, including active shooter situations; energy shortages; public health issues, including pandemics and quarantines, particularly in California or Washington state, where our centralized operating systems and administrative personnel are located, could negatively affect our operations and financial performance. Such events could result in physical damage to our properties, limitations on store operating hours, less frequent visits by members to physical locations, the temporary closure of warehouses, depots, manufacturing or home office facilities, the temporary lack of an adequate workforce, disruptions to our IT systems, the temporary or long-term disruption in the supply of products from some local or overseas suppliers, the temporary disruption in the transport of goods to or from overseas, delays in the delivery of goods to our warehouses or depots, and the temporary reduction in the availability of products in our warehouses. Public health issues, whether occurring in the U.S. or abroad, could disrupt our operations, disrupt the operations of suppliers or members, or have an adverse impact on consumer spending and confidence levels. These events could also reduce demand for our products or make it difficult or impossible to procure products. We may be required to suspend operations in some or all of our locations, which could have a material adverse effect on our business, financial condition and results of operations.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "One of the ways we celebrated Women\u2019s History Month was by serving lunch at the Salvation Army and providing necessary supplies for women moving into stable housing. We also presented the organization a check to help women at the Center For Hope in Charlotte.",
-        "classification": "systems-thinking",
-        "confidence": "80%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "The continuing impacts of the COVID-19 pandemic are highly unpredictable and volatile and are affecting certain business operations, demand for our products and services, in-stock positions, costs of doing business, availability of labor, access to inventory, supply chain operations, our ability to predict future performance, exposure to litigation, and our financial performance, among other things. Other factors and uncertainties include, but are not limited to: • The severity and duration of the pandemic, including future mutations or related variants of the virus in areas in which we operate; • Evolving macroeconomic factors, including general economic uncertainty, unemployment rates, and recessionary pressures; • Changes in labor markets affecting us and our suppliers; • Unknown consequences on our business performance and initiatives stemming from the substantial investment of time and other resources to the pandemic response; • The pace of recovery when the pandemic subsides; • The long-term impact of the pandemic on our business, including consumer behaviors; and • Disruption and volatility within the financial and credit markets.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "From Nashville to North Carolina, Coke Consolidated helped students and teachers get back to school by stuffing backpacks and distributing them to schools across our territory. For example, in Charlotte, we partnered with the Hornets to pack 2,000 backpacks and 275 teacher totes at the Spectrum Center.",
-        "classification": "systems-thinking",
-        "confidence": "85%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "We use natural gas, diesel fuel, gasoline, and electricity in our distribution and warehouse operations. Government regulations limiting carbon dioxide and other greenhouse gas emissions may increase compliance and merchandise costs, and other regulation affecting energy inputs could materially affect our profitability. As the economy transitions to lower carbon intensity we cannot guarantee that we will make adequate investments or successfully implement strategies that will effectively achieve our climate-related goals, which could lead to negative perceptions among members and other stakeholders and result in reputational harm. Climate change, extreme weather conditions, wildfires, droughts and rising sea levels could affect our ability to procure commodities at costs and in quantities we currently experience.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "Coca-Cola was honored with the designation of the Official Soft Drink of Memphis. To celebrate, Coke Consolidated teamed up with BODYARMOR and basketball star Ja Morant to unveil more than a dozen refurbished basketball courts throughout the city.",
-        "classification": "systems-thinking",
-        "confidence": "90%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "We also sell a substantial amount of gasoline, the demand for which could be impacted by concerns about climate change and increased regulations. More stringent fuel economy standards and public policies aimed at increasing the adoption of zero-emission and alternative fuel vehicles and other regulations related to climate change will affect our future operations and may adversely impact our profitability, and require significant capital expenditures.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "Our Refresh. Recycle. Renew. Initiative is comprised of three focus pillars: package recycling; water leadership; and climate protection designed to promote industry-leading sustainability solutions and best practices.",
-        "classification": "systems-thinking",
-        "confidence": "90%"
+        "company": "Costco",
+        "year": "2022",
+        "paragraph": "Our financial performance depends heavily on controlling costs. While we believe that we have achieved successes in this area, some significant costs are partially outside our control, particularly health care and utility expenses. With respect to the compensation of our employees, our philosophy is not to seek to minimize their wages and benefits. Rather, we believe that achieving our longer-term objectives of reducing employee turnover and enhancing employee satisfaction requires maintaining compensation levels that are better than the industry average for much of our workforce. This may cause us, for example, to absorb costs that other employers might seek to pass through to their workforces. Because our business operates on very low margins, modest changes in various items in the consolidated statements of income, particularly merchandise costs and SG&A expenses, can have substantial impacts on net income.",
+        "marker1": "Tension",
+        "marker2": "Micro Issue How"
     },
     {
-        "paragraph": "We partnered with North Carolina-based PET reprocessing innovators R3CYCLE to enable bottle-to-bottle recycling across our 14-state territory. We aspire to collect and recycle the equivalent of every bottle we sell by 2030.",
-        "classification": "systems-thinking",
-        "confidence": "85%"
+        "company": "IKEA",
+        "year": "2021",
+        "paragraph": "In February 2022, subsequent to the Russian invasion into Ukraine, the international community imposed economic sanctions (with the aim to stop most business interactions with Russia). As a consequence, Inter IKEA Group and its franchisee Ingka Group have been unable to continue operations. In June 2022, Inter IKEA Group and Ingka Group announced to scale down all business and operations in Russia and Belarus. Effectively this means that: • IKEA retail operations in Russia are stopped; • Import and export to and from Russia and Belarus is stopped and the two purchasing and logistics offices in Moscow and Minsk will close permanently by the end of 2022; • IKEA Industry has reduced the workforce in its 4 Russian production units and started the process of finding new ownership. Expectation is that this will be concluded beginning of 2023.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "Coca-Cola continues to make its packaging more sustainable. In 2021, we introduced the world\u2019s first bottle made completely of plant-based plastic, including the cap and label. Plant-based packaging helps us reach our goal of making 100% of our cans and bottles recyclable while reducing our dependency on virgin, fossil material.",
-        "classification": "systems-thinking",
-        "confidence": "85%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "Wellbeing & co-worker engagement Co-worker wellbeing, engagement and leadership has been heavily challenged and stretched due to geopolitical circumstances, the war in Ukraine, high inflation, organisational changes and operational supply chain challenges due to the Corona virus. This continues to be a challenge going forward also in respect of many ongoing business transformation priorities.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "This year, Sprite transitioned all plastic PET packaging from its signature green bottle to clear. Green PET is recyclable, but often ends up in single-use plastics. Taking color out of bottles improves the quality of the recycled material, keeping more bottles in the circular economy.",
-        "classification": "systems-thinking",
-        "confidence": "85%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "Global supply chains face unprecedented pressure and the war in Ukraine has increased that pressure even more. Increasing scarcity and cost of raw materials are negatively impacting supply and affordability of our products and the profitability of Inter IKEA Group. Social and regulatory scrutiny of human rights and ethical sourcing across the supply chain reach new levels. All examples of risks that require collaboration efforts to prioritise and enable agility, sustainability, traceability and resilience across the value chain.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "We are committed to sustainable business practices that reduce harmful outputs and conserve our planet\u2019s resources. BUILDING BETTER PLANTS We aim to reduce our absolute emissions by 20%. Energy reduction projects implemented to date include upgrades to LED lighting in more than 80% of our manufacturing facilities. The installation of blow mold bottle production will help reduce emissions from shipping empty bottles as will light-weighting 12oz bottles and caps at all locations. We traded trash compactors for energy incinerators at all production facilities to prevent 487 tons of emissions and create 198 MWH of renewable energy or power for 19 homes per year.",
-        "classification": "systems-thinking",
-        "confidence": "90%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "The IKEA sustainability strategy is built around three global sustainability challenges: climate change, workplace inequality and unsustainable consumption. The potential effects of these challenges are becoming increasingly visible in our business operations, for example through resource scarcity and energy shortages in factories.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "POSITIVE AGRICULTURE",
-        "classification": "non-systems-thinking",
-        "confidence": "70%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "There is also an increasing (legal) demand for companies to demonstrate their environmental and social contributions in a more comparable and quantifiable way. The EU has issued a new Corporate Sustainability Reporting Directive (‘CSRD’) that requires companies to publicly report on their ESG goals and impact, and to disclose the financial risks of climate change. CSRD will be applicable to the Group as from FY26. With the world facing increasing environmental challenges, growing public opinion expect that a company’s success should be steered towards positive outcomes for people and planet, rather than financial growth and profits only. Failing to meet the requirements of laws, policies and treaties such as the Paris Agreement primarily poses the risk of brand and reputation damage. In some cases non-compliance can lead to business restrictions and financial exposures.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "We\u2019re working to source our crops and ingredients in ways that help restore the earth and strengthen farming communities.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "The IKEA sustainability strategy secures a common sustainability agenda for all stakeholders in the IKEA value chain with a long-term perspective on the business. Profitability and responsibility are not opposing forces, on the contrary, they are interdependent. Long-term profitability can only be ensured by acting in a way that creates positive impact and trust among all stakeholders.",
+        "marker1": "Micro Issue Why"
     },
     {
-        "paragraph": "100% of our grower-sourced crops (potatoes, whole corn, and oats) are sustainably sourced in 30 countries, and more than 90% of these crops are sustainably sourced globally as of 2022",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "The People & Planet Positive strategy provides a common framework for all trademark users and units to develop and integrate sustainability tactics and actions into their own business plans, but gives flexibility for local, market relevant approaches and solutions. The strategy is built up around three focus areas: 1. Healthy and sustainable living 2. Circular & climate positive 3. Fair & equal",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "We maintained 100% Roundtable on Sustainable Palm Oil (RSPO) physically certified palm oil 2",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "The Group has a responsibility to secure good social, environmental and working conditions for the many people in the IKEA supply chain. The supplier code of conduct IWAY sets out our minimum requirements on environmental, social and working conditions. It is a starting point for developing shared values and expectations with our suppliers. Since its inception in 2000, IWAY has been regularly updated to address emerging social and environmental risks. IWAY entails a set of requirements applicable to every supplier. IKEA suppliers are responsible for communicating the content of the IKEA Supplier code of conduct to their employees and sub-suppliers and ensuring that all required measures are implemented at their own operations.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "We maintained 100% Bonsucro certified sustainable cane sugar globally 3",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "The Group faces financial (reporting & compliance) risks, such as foreign currency exchange, commodity price increases, credit and tax risks. Increased attention on taxation of multinational companies is addressed by implementing a Group-wide tax control framework, simplifying the Group structure and keeping tax, including transfer pricing and transparency high on the Group’s agenda. The resilience of our financial operations and controls are being stress-tested in times of supply chain disruptions, pandemic and transformation, further complicated by ever increasing regulations. It is critical to continue to invest in sustainable financial infrastructures and capabilities while staying focused on delivery and control of running business. For more details on the risks regarding financial instruments, we refer to section 15 of the financial statements.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "We\u2019re inspiring people through our brands to make choices that create more smiles for them and the planet.",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "The Group has presence in many different countries. Equality, inclusion and diversity increase our understanding of each other. That is why the Group recruits for and embraces diversity–to engage with co-workers of all ages, backgrounds, mind-sets and perspectives. In an environment of openness where everyone is important, and feels comfortable to experiment and try new ways.",
+        "marker1": "Micro Issue Why",
+        "marker2": "Micro Issue How"
     },
     {
-        "paragraph": "We are almost 80% of the way toward our 2025 targets in reducing added sugars, sodium, and saturated fat across our beverage and convenient foods portfolio",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "Within the Group, women are largely represented in our co-worker and manager base. The composition of the Management Board and the Supervisory Board is evaluated regularly, taking into consideration a number of criteria including relevant knowledge and experience, as well as a balanced gender distribution. All aspects of diversity, equality and inclusion are actively pursued across the whole Group.",
+        "marker1": "Micro Issue How"
     },
     {
-        "paragraph": "We\u2019re helping build a circular and inclusive value chain.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "The Group continues to invest significant resources to make IKEA more affordable, accessible and sustainable for customers everywhere with the ambition to reach and interact with 3 billion people. To make that happen, the Group invests in new ways to shop, more sustainable ways of working, and an inspiring, functional and affordable IKEA product range.",
+        "marker1": "Macro Issue How",
+        "marker2": "Purpose"
     },
     {
-        "paragraph": "In 2022, we continued to work toward our goal of 100% renewable electricity in our direct operations, and approximately 65% of our global electricity needs were met by renewable sources 5",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "There is a strong desire among consumers to change their lifestyles for the better and the Group wants to make healthier and more sustainable living possible for the many people. A majority of the IKEA stores have implemented the updated Sustainable living shop which shows solutions and services to make changes in lifestyle that are easy and affordable, with focus on saving energy, water and waste; and on prolonging the life of products.",
+        "marker1": "Macro Issue How",
+        "marker2": "Purpose"
     },
     {
-        "paragraph": "In December 2022, we set a new packaging goal for 20% of beverage servings to be delivered through reusable models by 2030",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "The iconic BILLY bookcase returned this year in a range of beautiful wood expressions. The product has undergone rejuvenation and has become more circular, more affordable and easier to assemble. It has a nail-free back panel to snap in and out of place more easily, thus enabling customers to disassemble and reassemble as needed. The new bookcases use less plastic compared to previous versions, and a high-quality paper foil printing technology means less wood is needed.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "As of 2022, our operational water-use efficiency improved by 22% in high water-risk areas vs. 2015 baseline, approaching our goal of 25% improvement by 2025",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "BILLY is just one example of an IKEA product that avoids unnecessary material consumption. Other examples include LACK tables and the PLATSA storage system, which use lightweight constructions. Recycled wood will play an even more important role going forward, and IKEA products will continue to include more and more recycled materials such aluminium, plastics and textiles. Additionally, the ÅBÄCKEN water nozzle provides an affordable solution to help customers cut down on water usage at home by up to 95% in mist mode.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "As of 2022, we increased our Black and Hispanic managerial populations in the U.S. to 9.0% and 10.1%, respectively, of our workforce",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "The Group is constantly looking for new ways to make production more sustainable and energy-efficient. Almost two-thirds of the IKEA climate footprint is directly connected to the supply chain, including production at suppliers.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "Women hold 44% of our global manager positions and continue to be paid within 1% of men",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "In FY22, IKEA started to phase out plastic from consumer packaging solutions, a phase-out that will happen in steps, starting with an all new range by 2025, and running range by 2028. With this phase-out, IKEA aims to reduce plastic waste and pollution, and drive the industry agenda to develop packaging solutions centred around renewable and recycled materials.",
+        "marker1": "Macro Issue How",
+        "marker2": "Agency"
     },
     {
-        "paragraph": "In addition to continuing our strong financial performance, we\u2019ve demonstrated an ability to lead with growth and win in the market.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "IKEA Industry continues to invest in renewable energy sources. Significant milestones were made in Poland and China. In May 2022, IKEA Industry Zbąszynek officially launched the construction process of one of the largest solar farms for own use in Europe with a total capacity of 19 MW. In August 2022, the factory in Nantong (China) officially opened a new solar installation adding an extra 4.5 MW of energy production capacity to the existing 3.5 MW solar installation opened in 2015 on the same factory roof. The investments will save energy costs and lower the climate footprint of IKEA furniture manufacturing.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "Continued to meet consumers\u2019 needs and improve the consumer experience, making meaningful progress on all key portfolio transformation bets and with significant growth in more nutritious snacking and zero sugar platforms.",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "IKEA",
+        "year": "2022",
+        "paragraph": "During FY23, while remaining prudent and cost conscious, investments in research activities and development by the core businesses Franchise, Range and Supply will continue. The Group will finance these investments from its own funds.",
+        "marker1": "Tension"
     },
     {
-        "paragraph": "To be an even Stronger company, we are continuing to transform our capabilities, cost, and culture, especially through innovation and by putting data at the center of our business. We also want our associates to continue to feel proud of our company and engaged with what we are doing.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "Wayfair",
+        "year": "2022",
+        "paragraph": "The world changed very quickly again in early 2022. Geopolitical disruption led to massive inflation in energy costs that cascaded through supply chains and put pressure on the wallets of consumers everywhere. As a consequence, demand in our category began to slow in the Spring to early Summer of 2022 just as the supply chain congestion eased and inventory levels recovered materially. While this put pressure on the topline for retailers across the industry - ourselves included - we also saw several of the factors that drove the headwinds we experienced starting in the second half of 2021 begin to unwind. First, availability improved as more of the best products were back in stock. Second, during the summer, suppliers increasingly leaned into CastleGate once more to forward position goods, with the combination of optimized delivery speeds and lower shipping costs leading to sharper retail prices and the opportunity to drive higher sales. Finally, as suppliers and retailers everywhere realized they had significantly overbuilt inventories, and with key input costs such as ocean freight now much lower, suppliers started to discount their items via lower wholesales in order to further drive demand for their products. These factors, in conjunction with inflation easing as energy and other direct input prices moderated in the late Fall, enabled us to deliver more competitive prices for consumer.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "7 million acres\u2014land approximately equal to the company\u2019s entire agricultural footprint; sustainably source key crops and ingredients; and help improve the livelihoods of more than 250,000 people in our agricultural supply chain and communities, all by 2030.",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "Wayfair",
+        "year": "2022",
+        "paragraph": "Through cross-functional partnerships, the DEI team creates the strategy and identifies initiatives to embed a lens of inclusivity into all aspects of the business with a keen focus on increasing diverse representation internally and externally. We have worked to include DEI best practices into several parts of the employee lifecycle, including hiring, performance management and carer and leadership development. In addition to threading DEI through the employee lifecycle, we have partnered with groups across the business to leverage DEI principles in support of our broader company goals - not only for our people, but for our customers, our suppliers and our partners.",
+        "marker1": "Micro Issue How"
     },
     {
-        "paragraph": "Granting funding to 14 projects in 11 countries through our Positive Agriculture Outcomes Fund, helping to tackle some of the most difficult challenges facing agriculture today",
-        "classification": "systems-thinking",
-        "confidence": "75%"
+        "company": "Wayfair",
+        "year": "2022",
+        "paragraph": "Wayfair is committed to protecting our team members' health and wellness. Since the onset of the COVID-19 pandemic we have continued to follow the guidance and recommendations from the Center for Disease Control (CDC) and all local public health authorities. We strongly encourage all employees to become fully vaccinated. We also provide benefits and resources to employees to address stress, burnout and mental health and promote self-care.",
+        "marker1": "Micro Issue How"
     },
     {
-        "paragraph": "We are helping to build a circular and inclusive value chain through actions designed to achieve Net-Zero emissions by 2040, become Net Water Positive by 2030, and help build a world where packaging never becomes waste. As part of this, we are adopting new models and decoupling environmental impact from business growth.",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "Wayfair",
+        "year": "2022",
+        "paragraph": "Uncertainties in global economic conditions that are beyond our control have in the past impacted our business and may in the future materially adversely affect our business, results of operations, financial condition and stock price. These adverse economic conditions include inflation, slower growth or recession, new or increased tariffs and other, changes to fiscal and monetary policy, higher interest rates, high unemployment, decreased consumer confidence in the economy, armed hostilities, such as the ongoing military conflict between Russia and Ukraine, foreign currency exchange rate fluctuations, conditions affecting the retail environment for products we sell, and other matters that influence consumer spending and preferences.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "22 markets have at least one product packaged with 100% recycled PET (rPET)",
-        "classification": "systems-thinking",
-        "confidence": "75%"
+        "company": "Wayfair",
+        "year": "2022",
+        "paragraph": "In particular, while we saw increased sales and order activity at times during the COVID-19 pandemic, the pandemic significantly disrupted the global supply chain, including many of our suppliers, logistics providers and other partners. Such disruptions, including staffing shortages, raw material and labor inflation, factory closures and production slowdowns, port closures a stoppages and/or disruptions in delivery systems, have and may continue to materially and adversely affect our suppliers' ability to provide products in a timely manner, or at all, and have and may continue to materially and adversely affect our logistics providers' ability to distribute products to our customers in a timely manner, or at all. The issues related to the global supply chain may continue into 2023.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "Advancing our Diversity, Equity & Inclusion (DE&I) agenda around our people, business partnerships, and the communities we serve. We have reached 44% gender parity in management globally, whilst increasing U.S. Black and Hispanic representation at the manager level to 9.0% and 10.1%, respectively. We are also expanding our efforts to support historically marginalized communities around the world by increasing diverse representation, supporting our business partners, and helping to create economic opportunity in communities",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "Wayfair",
+        "year": "2022",
+        "paragraph": "In addition, there is also uncertainty regarding potential laws, regulations and policies related to Environmental, Social, Governance (\"ESG\") and global environmental sustainability matters, including disclosure obligations and reporting on such matters. Changes in the legal or regulatory environment affecting ESG and sustainability disclosure, responsible sourcing, supply chain transparency, or environmental protection, among others, including regulations to limit carbon dioxide and other greenhouse gas emissions, to discourage the use of plastic or to limit or to impose additional costs on commercial water use may result in increased compliance costs for us and our business partners, all of which may negatively impact our results of operations, financial condition and cash flows. The expectations related to ESG and sustainability matters are rapidly evolving, and from time to time we announce certain initiatives and goals, related to these matters. We could fail, or be perceived to fail to act responsibly, in our efforts, or we could fail in accurately reporting our progress on such initiatives and goals. In addition, we could be criticized for the scope of such initiatives or goals. As a result, we could suffer negative publicity and our reputation could be adversely impacted, which in turn could have a negative impact on investor and customer perceptions.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "We\u2019re inspiring people through our brands to make choices that help create better outcomes for them and the planet. That means continuing to expand portfolio offerings with less added sugar, sodium, and saturated fat, whilst driving new packaging solutions across beverages and convenient foods",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "As an integrated energy company, we believe we are set up to help deliver energy security and affordability today, as well as helping to accelerate the energy transition. In the three years since we first set out our strategy, our track record of delivery has given us increased confidence as we invest in bp’s transition and the energy transition.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "Advancing more nutritious snacking platforms with significant growth in North America driven by brands like PopCorners, SunChips, and Bare, whilst launching the national expansion of PopCorners in the U.K.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "We deliver energy products and services to our customers around the world, and we plan to do so increasingly in ways that we believe will help drive the transition to a lower carbon future.",
+        "marker1": "Agency"
     },
     {
-        "paragraph": "Using more diverse ingredients such as legumes, whole grains, plant-based proteins, fruits and vegetables, and nuts and seeds. This includes launching SunChips Black Beans, a new variety made with whole grains and real black beans, and new Quaker Oats flavor offerings with 100% whole grain oats",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "bp continues to focus on actions to maintain and enhance the effectiveness of the safety processes and procedures at bp operations, including supporting a culture of care for others. We firmly believe that when colleagues care deeply about each other, then they really lookout for each other, and everyone is safer.",
+        "marker1": "Micro Issue How",
+        "marker2": "Micro Issue Why"
     },
     {
-        "paragraph": "Advancing against our added sugars reduction goal, with Pepsi Zero Sugar now available in 110 international markets and growth in other zero sugar products",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "In terms of transformation, the proportion of bp’s total capital investment in what we call our transition growth engines has risen from around 3% in 2019 to around 30% in 2022. This included: • The acquisition in 2022 of Archaea Energy, a leading US producer of renewable natural gas, accelerating the growth of our bioenergy business. • The establishment of new businesses in offshore wind and hydrogen. • A tripling in the number of bp pulse EV charge points globally, from more than 7,500 in 2019, to around 22,000. • The addition of more than 750 strategic convenience sites to our global retail network since 2019.Since 2019, bp has also reduced emissions from our oil and gas operations and production, further rationalized the portfolio and started up 13 major projects.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "Launching One Smile at a Time, our global employee volunteering platform, across nearly all of our top 20 markets, empowering our associates to impact their communities at scale. In 2022, we delivered more than 290,000 hours of service through the platform",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Recent events have made it clear that the world wants and needs a better and more balanced energy system, delivering energy that is not only lower carbon, but secure and affordable too – this is known as the energy trilemma.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "Continuing to make a difference for people around the world through the PepsiCo Foundation by helping increase equitable access to safe water; funding nearly 1,800 scholarships for Black and Hispanic students through the Uplift Community College Scholarship Program; and helping increase food security, delivering more than 20 million meals in 2022 alone.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Transforming today’s global energy system so that it can consistently deliver all three is a complex challenge. To tackle it, the energy transition must accelerate. When bp published the Energy Outlook 2023 earlier this year, one of its insights was that Russia’s war in Ukraine is likely to accelerate that transition. At the same time, the energy transition needs to be orderly – decarbonizing rapidly while maintaining the balance of supply and demand that’s needed to help avoid, as best as possible, the energy shortages and price rises that have been so difficult for people and businesses.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "We delivered our best financial performance in a decade, whilst staying true to our values and continuing to build a strong, durable foundation for long-term growth.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "First, by planning to invest more into our transition growth engines through this decade than under our previous plans – up to $8 billion more by 2030. That includes making investments that can help people decarbonize their lives and their businesses sooner – such as EV charging, sustainable aviation fuels and hydrogen for hard-to-abate industries. Our cumulative investment in these transition growth engines is expected to be in a range of $55-65 billion between 2023 and 2030.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "Each example of our success is one piece of a much bigger transformation. A transformation that began in 2019, when we launched our effort to become Faster, Stronger, and Better and turn a good company into a great one. That continued to unfold in 2020 and 2021, when we proved we have the right strategy and the right people. And that accelerated in 2022, a year when we showed the world something new: that it is possible for a large, global company to perform and transform at the same time.",
-        "classification": "systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Second, by planning to invest more into oil and gas – again, up to $8 billion more by 2030. With investments into resilient, high-quality oil and gas projects – prioritizing where we can deliver quickly and efficiently, and in ways that minimize additional emissions and maximize our contribution to energy security.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "Keeping our categories very relevant to consumers and accelerating our share gains in our key markets",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "This is a plan for delivery, for growth and for value creation. And as bp’s earnings grow, we can: • Invest more in bp’s transition and in the energy transition. • Invest more in today’s energy’s security• Create more value for bp’s shareholders. • Benefit governments and society with the taxes and revenues generated by bp’s increased earnings.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "Building high flexibility, agility, and resilience in our planning processes to allow us to pivot quickly as the world changes around us.",
-        "classification": "systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Energy markets have been volatile, largely driven by the effects of the Russia-Ukraine war. Concerns about energy security, fuel prices and emissions are boosting prospects for non-fossil fuels – especially renewables – as the world transitions towards a lower carbon future.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "We are also focused on the safety of our associates in Ukraine and have provided humanitarian aid, goods and services to support our people and communities facing the ongoing deadly conflict.",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "The global economy experienced a broad-based slowdown in 2022, following a post-COVID-19 lockdown economic rebound in 2021. Soaring energy prices, multi-decade high inflation levels, tightening monetary policy conditions, the Russia-Ukraine war, and COVID-19 contributed to a below-average growth rate of 3.4% for the global economy in 2022. Growth in advanced economies was 2.7%, following falls in GDP in the US during the first half of the year, and an economic slowdown in the euro area in the second half. Growth in emerging markets slowed to 3.9%, with eastern Europe hit hard by the Russia-Ukraine war and China experiencing extended COVID-19 lockdowns and a slowdown in the property sector.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "Our focus has been on developing new delivery-system applications, sales-demand planning, production planning, inventory and warehouse management systems, and upgraded core financial systems.",
-        "classification": "non-systems-thinking",
-        "confidence": "70%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Global oil demand continued its post-COVID-19 recovery, increasing by 2.2mmb/d in 2022 (+2.3%). Europe’s energy crisis, a strong US dollar, and persistent COVID-19 lockdowns in China all contributed to slower energy demand growth and weaker oil demand growth. Brent increased by $30.4/bbl in 2022 as a result of the rebound in oil demand and the oil risk premium associated with the Russia-Ukraine war.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "We remain focused on identifying opportunities to increase the use of resources to improve results, while streamlining operations to reduce inefficiencies.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Global momentum behind hydrogen’s role in decarbonizing hard-to-abate sectors is accelerating, notably in industry and long-distance transportation. Several countries have published national hydrogen strategies and this is increasingly being followed by announcements of policy support. 2022 was a significant year in terms of policy support for hydrogen production.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "Our Company\u2019s mission statement sets an ambitious goal \u2013 to make, sell, and deliver soft drinks better than anyone else. To be the best Coca-Cola bottler we can be, we will have to continue to improve our manufacturing, selling, and delivery capabilities. We remain committed to achieving that goal.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Russia-Ukraine war: The Russia-Ukraine war is likely to have a persistent effect on the future path of the global energy system. The 2023 Outlook models this impact through three main channels: • Energy security: The increased focus on energy security triggered by concerns about energy shortages and vulnerability to geopolitical events is assumed to increase countries’ and regions’ preference for energy produced domestically rather than imported. • Economic growth: The higher food and energy prices associated with the Russia-Ukraine war have contributed to a sharp slowing in global economic growth. Further out, the war is assumed to reduce somewhat the pace of global integration and trade. • Composition of global energy supplies: The scenarios in the 2023 Outlook assume there is a persistent reduction in Russian exports of hydrocarbons.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "These positive outcomes were made possible by our team\u2019s highly effective execution across all aspects of our business. This success has enabled us to continue to strengthen our balance sheet through debt reduction, reward and recognize our teammates, invest in our business and serve our communities.",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Embedded across our strategy is our sustainability frame, which sets out our aims for getting to net zero, improving people’s lives and caring for our planet.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "In 2022, our company continued its rich legacy of building better futures for our teammates and the communities we serve. Specific actions included the introduction of our Hope Scholarship, a new program that will provide financial support for education to a growing number of our teammates and their family members. It also included further evolution of our diversity, equity, and inclusion \u201cSeat at the Table\u201d framework, giving teammates a voice through communications, celebrations, and resources that spur understanding and constructive dialogue. We also expanded health and wellness benefits and increased vacation time for teammates.",
-        "classification": "systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Gas & low carbon energy Creating low carbon energy solutions. Integrating our existing natural gas capabilities with power trading and growth in low carbon businesses and markets, including wind, solar, hydrogen and carbon capture and storage (CCS). Creating value through • Integrated gas and LNG businesses. • Onshore and offshore wind. • Our 50% stake in Lightsource bp. • Hydrogen and CCS. • Gas trading and power trading, and marketing of both renewable and non-renewable power.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "Through our volunteerism and philanthropic contributions, Coke Consolidated supported hundreds of communities with food, shelter, clothing, educational and spiritual growth opportunities. This type of support has been, and will continue to be, a hallmark of our company\u2019s presence in each community we serve.",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Our focus remains on safely delivering value, maximizing returns and cash flow and reducing emissions. Having grown production in 2022, we plan to grow underlying production to 2025, and hold broadly flat to 2030, relative to 2022. In the second half of the decade, we have options to progress several new hub opportunities in our existing operating areas.",
+        "marker1": "Purpose"
     },
     {
-        "paragraph": "Our brand is now global, our route now encompasses 14 states, and we work to make a positive impact for our communities, our teammates, our customers, and our shareholders.",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Nuseed Carinata: we entered into a 10-year strategic agreement with Nuseed to accelerate the expansion of Nuseed Carinata oil, a non-food cover crop used to produce low carbon biofuel feedstock. Working with Nuseed can help us advance decarbonization efforts in hard-to-abate transportation sectors like aviation by supporting production of sustainable aviation fuel (SAF) and other biofuels.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "In July, Eastern Kentucky was deluged with historic flooding that took 37 lives. Scorching heat, steady rain, and impassable roads made for a desperate situation. Coke Consolidated\u2019s Response Team immediately hit the ground clearing debris and providing clean drinking water to help impacted teammates and community members.",
-        "classification": "systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "By bringing our capabilities and reach in convenience together with EV charging, we can provide customer-focused, lower carbon transport solutions over time. We are also focused on growth in our differentiated fuels, Castrol, aviation, B2B and midstream including biofuels businesses.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "For 120 years, our teammates have woken up every day to make a difference in the world around them. We\u2019re a team of servant leaders guided by our Purpose, giving back to the communities where we live and serve, and helping each other succeed at work and at home.",
-        "classification": "systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "And we’re building Europe’s first public charging corridor for E-trucks. We’re opening eight dedicated E-truck charging stations at key sites in Germany along the Rhine-Alpine corridor – one of Europe’s busiest road freight routes. These ultra-fast 300kW electric chargers are capable of adding up to 200km of range to medium and heavy-duty vehicles in 45 minutes.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "In 2021, Coke Consolidated announced the Hope Scholarship to help teammates and their immediate family members pursue their purpose and passion. This year, 32 teammates across our territory were honored with an inaugural scholarship, which offers financial support in pursuit of a license, certification, or two-to-four-year college degree of their choice.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "We’ve announced plans to invest up to £1 billion in UK EV charging infrastructure over the decade, supporting the rapid roll-out of fast, convenient charging across the country. The investment supports our plans to: • Meet the UK’s fast-growing demand for EV charging. • Approximately triple the number of public charge points in our UK network by 2030. • Accelerate the roll-out of 300kW and 150kW ultra-fast charge points. • Support the UK’s transition to low carbon transportation for consumers and fleet vehicles. • Upgrade our current EV charging technology across our public charging network to improve reliability.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "This year more than 20 students completed Coke Consolidated\u2019s applied learning program helping grow skills and build confidence by leading projects. Projects in marketing, corporate communications, sales, and manufacturing allowed students to build lasting relationships within the company and with our partners.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Hydrogen: we plan to use our refineries as demand anchors, and to scale these up to regional hubs providing low carbon solutions for customers, particularly in hard-to-abate sectors, such as steel. In parallel, as markets evolve, we expect to invest to build global export hubs for hydrogen and hydrogen derivatives. These are in advantaged geographies where we have an established presence.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "One of the ways we provide opportunities for our teammates to learn, grow, and achieve their careers' goals is through a 10-month leadership training program. 25 participants worked on five different high-impact business challenges: communication and collaboration; attracting and retaining talent; innovation; reaching the customer; and further developing our Environmental, Social, Governance strategies. This latest group of Servant Leaders graduated on May 4th at the University of South Carolina\u2019s Darla Moore School of Business.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Renewables & power: we are focusing our investment in renewables on opportunities where we can create integration value, and enhance returns. We aim to do this with focused investment to build out a renewables portfolio in service of green hydrogen , green and e-fuels, EV charging, and power trading. This includes building a global position in offshore wind, enabled by our capabilities in large-scale, complex offshore projects. By integrating our power trading and marketing activities into this growth engine, we can integrate through the value chain from generation to customer, enhancing returns, building market position and supporting the decarbonization of electricity.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "In November, we announced a commitment to fund apprenticeships through Central Piedmont Community College in Charlotte. Coke Consolidated will support up to 30 candidates financially as they pursue certification in fields ranging from HVAC repair to manufacturing.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "We’ve acquired a 40.5% stake and operatorship of the Australian Renewable Energy Hub (AREH) project in Western Australia. At full scale, if all of its planned renewable capacity is used for green hydrogen or ammonia production AREH could produce 1.6 million tonnes (gross) of green hydrogen or 9 million tonnes (gross) of green ammonia per year – making it one of the largest green hydrogen projects in the world.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "We promoted minority and diversity-owned businesses and featured personal stories from our teammates fostering a sense of belonging. By elevating diverse voices, we highlight the unique perspectives everyone brings to their seat at the table.",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "We are progressing a major CCS project to advance decarbonization efforts across the Texas Gulf Coast. The project aims to store the equivalent CO2 of removing 3 million cars from the road a year. • Third party emitters will capture CO2 from their facilities to produce low carbon hydrogen. • As part of the project, bp will appraise, develop and permit sites to permanently store the CO2.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "Ten elite students from Historically Black Colleges and Universities were invited to engage with our company leaders, learn new business skills, and experience our purpose and culture firsthand during the week-long SOAR program. Students have the potential to become part of the Coke Consolidated family as future full-time teammates.",
-        "classification": "non-systems-thinking",
-        "confidence": "80%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Scope 1 (direct) emissions, covered by aim 1, were 30.4MtCO2e – a decrease of 8% from 33.2MtCO2e in 2021. Of these Scope 1 emissions, 29.7MtCO2e were CO2 and 0.7MtCO2e methane. Emissions decreased due to divestments, delivery of Sustainable emissions reductions (SERs) and other temporary operational changes. Scope 2 (indirect) emissions decreased by 0.9MtCO2e, to 1.5MtCO2e, a 38% reduction compared with 2021. This decrease resulted from lower carbon power agreements, including those at our Gelsenkirchen, Cherry Point and Rotterdam sites.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "We\u2019re constantly forging innovative partnerships, driving brand awareness, and creating goodwill alongside The Coca-Cola Company and more than 45 strategic customer connections, including professional sports teams, colleges, universities, and theme parks. In 2022, we became the official soft drink of Charlotte\u2019s professional soccer club, and we extended our Founding Level Partnership with the Charlotte Hornets and introduced Dr Pepper as the lead brand.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "We define methane intensity as the amount of methane emissions from our upstream oil and gas operations as a percentage of the gas that goes to market from those operations. This applies to methane emissions within our operational control boundary, where we have the highest degree of control. Methane emissions from non-producing activities, such as exploration drilling, are excluded. The 2022 methane intensity is calculated using existing methodology and, while it reflects progress in reducing methane emissions, it will not directly correlate with progress towards delivering the 2025 target under aim 4.",
+        "marker1": "Micro Issue How"
     },
     {
-        "paragraph": "We created 16 closed-loop economies throughout our territory. Our efforts in 2022 resulted in nearly 285 million bottles being collected and made into new bottles.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "This measure includes actions taken by our businesses to improve energy efficiency and reduce methane emissions and flaring – all leading to ongoing, quantifiable GHG reductions. These refer to the GHG emissions on an operational control basis, which comprise 100% of emissions from activities that are operated by bp and would have occurred had we not made the change – they are absolute in nature. Since 2019 progress against this target has been used as a factor in determining bonuses for eligible employees, including executives.",
+        "marker1": "Micro Issue How"
     },
     {
-        "paragraph": "We teamed up with Giant Food to clean up Oxon Creek in Washington D.C.\u2019s 8th Ward. Volunteers cleared tires, household items, and other litter from this important waterway.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "We believe the world is on an unsustainable path – we support the Paris goals, and the carbon budget to meet those goals is running out.",
+        "marker1": "Micro Issue Why"
     },
     {
-        "paragraph": "To be an even Faster company, we are focusing our efforts on continually winning in the marketplace, finding ways to be even more consumer-centric, and accelerating investment for top-line growth, including by pivoting our portfolio.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "bp’s strategy is informed by all these considerations. It is designed to create long-term value for shareholders, while enabling delivery of our net zero ambition – to become a net zero company by 2050 or sooner, and to help the world get to net zero. It is designed to be resilient to the uncertainty of the energy transition across many different potential pathways, including various Paris-consistent pathways.",
+        "marker1": "Macro Issue How",
+        "marker2": "Purpose"
     },
     {
-        "paragraph": "Since then, pep+ has become the North Star for how we want to win in the marketplace, how we want to transform, and how we want to create value for ourselves and others. To make this clear, we elevated it to be part of our overarching vision: to be the global leader in beverages and convenient foods by Winning with pep+.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "The bp Energy Outlook 2023 has been updated to reflect the significant developments in global energy markets over the past year, including the possible impact of the Russia-Ukraine war on the pace of the energy transition. It includes three main scenarios – two of which we regard as Paris-consistent (Accelerated and Net Zero) – that we use to inform our strategy.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "Setting high ambitions in cost transformation and elevating our focus on cost control in every Business Unit",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "We believe our strategy positions bp for success and resilience in a Paris-consistent world – a world that is progressing on one of the many global trajectories considered to be Paris-consistent, and ultimately meets the Paris goals.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "We believe we are well-positioned to lead this change",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "The strategy diversifies bp’s portfolio and business interests, reducing the risk that challenges facing a single business area might adversely affect bp’s strategic resilience. In addition, within the inevitable constraints associated with factors such as long-term capital investments, contractual commitments and organizational capabilities at any given time, bp’s ability to maintain its strategic resilience rests, in part, on the governance used to keep the strategy associated targets and aims under review in light of new information and changes in circumstances.",
+        "marker1": "Macro Issue Why"
     },
     {
-        "paragraph": "by building on the work your Company has already undertaken in product innovation, process innovation and redesign, information systems enhancements, resource efficiency and a relentless focus on our Coca-Cola franchise sales business.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "In our climate-related financial disclosures on page 58, we describe how we have conducted an analysis to test our view of the resilience of our strategy to different climate-related scenarios, using the update on strategic progress presented in February 2023. This includes scenarios that are classified by the World Business Council for Sustainable Development (WBCSD) to be consistent with well-below 2°C and 1.5°C outcomes.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "Our new business initiatives are designed to leverage our core competencies and complement our Coca-Cola franchise sales business. We anticipate these new business initiatives will provide tangible financial results during the next three to 10 years. Having said that, our primary focus and commitment is to the Coca-Cola franchise sales business.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "We see huge opportunity in the energy transition – the transformation of the energy system that we believe to be a necessary feature of the world’s efforts to meet the Paris goals. There are many ways a company at the heart of the energy sector can make a meaningful contribution to the world getting to net zero. These include: policy advocacy and seeking to use the company’s influence with trade associations (who conduct climate-related advocacy); low carbon collaboration and support for others in their own decarbonization efforts (such as cities and companies); and investment in low carbon and technology development. bp seeks to advance these areas through our aims in support of our net zero ambition, including aims 6-10 which are focused on activities which can help the world get to net zero, see page 47.",
+        "marker1": "Macro Issue How"
     },
     {
-        "paragraph": "For example, we invested approximately $240 million in 2022 primarily focused on enhancing efficiency and increasing capacity across our 14-state territory. These investments included a 350,000-square-foot distribution center in Chesterfield, Virginia and automated packaging technologies at our facilities in Charlotte, Indianapolis and Sandston, Virginia.",
-        "classification": "non-systems-thinking",
-        "confidence": "75%"
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "And, as we pursue our strategy, our diversification and the growth of our low carbon businesses may also contribute to helping the world get to net zero. For example, in Teesside in the UK, we have worked to advance components of the East Coast Cluster – a vision for decarbonizing local heavy industries at scale, with CO2 from their emissions taken offshore for permanent storage through Northern Endurance Partnership’s carbon capture and storage facilities. This has the potential to store up to 27 million tonnes of CO2 emissions a year by 2030.",
+        "marker1": "Macro Issue How"
+    },
+    {
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "As another example, our aim 6 is to more actively advocate for policies that support net zero, including carbon pricing. Helping policymakers to design and put in place low carbon policies can help deliver our strategy and capitalize on the huge opportunities associated with achieving the Paris goals, but the benefit of such advocacy, if successful, extends well beyond any implications for bp’s own GHG metrics. That is because well-designed low carbon policies can also advance the decarbonization of a whole economy – something potentially of far greater impact than anything a single company can achieve through its own portfolio. We publish examples of our activity in support of aim 6 online at bp.com/advocacyactivities.",
+        "marker1": "Macro Issue How"
+    },
+    {
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Our price assumptions continue to reflect a range of possibilities, including that the transition to a lower carbon economy and energy system could accelerate. They also now reflect new supply side constraints that have emerged as a result of the Russia-Ukraine war.",
+        "marker1": "Macro Issue How"
+    },
+    {
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "EVs: Together with our strategic convenience site networks, our investment in EV charging will help us to offer low carbon solutions to customers. We believe that, for road transport to decarbonize at the pace and scale needed to achieve the goals of the Paris climate agreement, it is necessary for the roll-out of EV charging infrastructure and usage of electric vehicles to be scaled up in parallel with – or even ahead of – the decarbonization of electricity grids. As a result, in some geographies it may be some years before grid decarbonization begins to drive down the lifecycle carbon intensity of EV charging. In 2022 EV charge points installed and energy sold grew by more than 65% and around 150%, respectively, compared to 2021, with charge points now at ~22,000. See page 41 for more information.",
+        "marker1": "Macro Issue How"
+    },
+    {
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "In 2022 low carbon activity investment – a subset of our total aim 5 transition growth investment – accounted for more than 80% of our total aim 5 investment. It increased from $2.2 billion in 2021 to more than $4 billion. Most of this investment was in biogas, offshore wind, electric vehicle charging and hydrogen. Going forward, we anticipate that more than 80% of our 2030 transition growth investment being on low carbon activity.",
+        "marker1": "Macro Issue How"
+    },
+    {
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Strategic alignment: For all investment cases, we consider whether the investment supports delivery of our strategy, including our net zero aims. We also assess if the investment case involves distinctive capability that bp has, or intends to develop, and whether it adds to an existing ’scale’ business within the portfolio or could help us create one.",
+        "marker1": "Macro Issue How"
+    },
+    {
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Sustainability: for all investment cases, we consider how any proposed business opportunity is connected to the energy transition, societal needs and the environment. This approach is underpinned by our purpose and sustainability frame. Investment cases above defined thresholds for anticipated annual GHG emissions from operations must estimate those anticipated emissions and incorporate carbon pricing for those emissions into the investment economics. All RCM cases must consider significant impacts of an investment on key sustainability aims, informed by the sustainability assessment template, referred to above.",
+        "marker1": "Macro Issue How"
+    },
+    {
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "Hydrogen and carbon capture and storage In Hydrogen and carbon capture and storage (CCS), we progressed 1.8mtpa net to bp of hydrogen opportunities to project pipeline (concept development stage).",
+        "marker1": "Macro Issue How"
+    },
+    {
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "In Europe, in February 2022, jointly with HyCC we announced plans to develop H2-Fifty, a 250MWe green hydrogen production plant in the port area of Rotterdam. The facility could supply bp’s refinery in the city and has the potential to reduce CO2 emissions by up to 350,000 tonnes per year.",
+        "marker1": "Collaboration",
+        "marker2": "Macro Issue How"
+    },
+    {
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "In the US, in May 2022, we announced our plans to develop a major CCS project to advance decarbonization efforts to store up to 15 million metric tons of CO2 across the Texas Gulf Coast. We expect that this project will enable low carbon hydrogen production and decarbonize facilities and third-party emitters.",
+        "marker1": "Macro Issue How"
+    },
+    {
+        "company": "BP",
+        "year": "2022",
+        "paragraph": "We are building global presence in offshore wind. In March 2022 we announced a partnership with Marubeni to explore a selected offshore wind development opportunity in Japan. We have agreed to acquire a 50% stake in a proposed offshore wind project. This will enable us to combine local operational expertise with our extensive global offshore wind experience. Additionally, our joint venture in the UK was awarded a lease option for an area in the Irish Sea which could support ~3GW of offshore wind capacity, enough to power more than 3.4 million homes. Finally, in August 2022, bp and our partner EnBW received a favourable environmental impact assessment (EIA) from the Bureau of Ocean Energy Management (BOEM) for our US offshore wind project off the coast of New York.",
+        "marker1": "Collaboration",
+        "marker2": "Macro Issue How"
     }
-]
-; // Initialize as an empty array or with your data
-            let currentParagraphIndex = 0; // Initialize the index
+];
 
-            document.addEventListener('DOMContentLoaded', function() {
-                loadParagraph(currentParagraphIndex);
-                updateIndexSelector(); // Populate the index selector
+        let currentParagraphIndex = 0;
 
-                document.getElementById('feedbackForm').addEventListener('submit', function(event) {
-                    event.preventDefault(); // Prevent form from actual submission and page reload
-                    submitFeedback();
-                });
+        document.addEventListener('DOMContentLoaded', function() {
+            loadParagraph(currentParagraphIndex);
+            updateIndexSelector();
 
-                document.getElementById('jsonIndexSelector').addEventListener('change', function() {
-                    currentParagraphIndex = parseInt(this.value);
-                    loadParagraph(currentParagraphIndex);
-                });
+            document.getElementById('feedbackForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                submitFeedback();
             });
 
-            function updateIndexSelector() {
-                const selector = document.getElementById('jsonIndexSelector');
-                selector.innerHTML = ''; // Clear existing options
-                jsonData.forEach((_, index) => {
-                    const option = document.createElement('option');
-                    option.value = index;
-                    option.text = `Paragraph ${index + 1}`;
-                    selector.appendChild(option);
-                });
-            }
+            document.getElementById('jsonIndexSelector').addEventListener('change', function() {
+                currentParagraphIndex = parseInt(this.value);
+                loadParagraph(currentParagraphIndex);
+            });
+        });
 
-            function loadParagraph(index) {
-                if (!jsonData.length || index < 0 || index >= jsonData.length) {
-                    const container = document.getElementById('paragraphContainer');
-                    container.innerHTML = '<p>No paragraph available.</p>';
-                    return;
-                }
+        function updateIndexSelector() {
+            const selector = document.getElementById('jsonIndexSelector');
+            selector.innerHTML = '';
+            jsonData.forEach((_, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.text = `Paragraph ${index + 1}`;
+                selector.appendChild(option);
+            });
+        }
 
-                const item = jsonData[index];
+        function loadParagraph(index) {
+            if (!jsonData.length || index < 0 || index >= jsonData.length) {
                 const container = document.getElementById('paragraphContainer');
-                container.innerHTML = `
-                    <p>Paragraph ${index + 1} of ${jsonData.length}:</p>
-                    <p>${item.paragraph}</p>
-                    <p>Classification: ${item.classification}</p>
-                    <p>Confidence: ${item.confidence}</p>
-                    <hr>`;
+                container.innerHTML = '<p>No paragraph available.</p>';
+                return;
             }
 
-            function submitFeedback() {
-                const feedback = document.getElementById('feedback').value;
-                const name = document.getElementById('name').value;
+            const item = jsonData[index];
+            const container = document.getElementById('paragraphContainer');
+            container.innerHTML = `
+                <p>Paragraph ${index + 1} of ${jsonData.length}:</p>
+                <p>${item.paragraph}</p>
+                <p>Company: ${item.company}, Year: ${item.year}</p>
+                <div id="markerButtonsContainer"></div>
+                <div id="markerFeedbackContainer" class="markerFeedbackContainer"></div>
+                <hr>`;
 
-                if (!feedback || !name) {
-                    alert('Please fill in both feedback and name fields.');
-                    return;
+            loadMarkerButtons(item);
+            loadMarkerFeedback(item);
+        }
+
+        function loadMarkerButtons(item) {
+            const container = document.getElementById('markerButtonsContainer');
+            container.innerHTML = '';
+
+            for (let key in item) {
+                if (key.startsWith('marker') && item[key]) {
+                    const button = document.createElement('button');
+                    button.className = 'markerButton';
+                    button.textContent = item[key];
+                    button.onclick = function() {
+                        alert(`Clicked on marker: ${item[key]}`);
+                    };
+                    container.appendChild(button);
                 }
-
-                // Simulate a successful submission without making an actual network request
-                setTimeout(() => {
-                    alert('Feedback submitted successfully.');
-
-                    // After simulating feedback submission, increment the index and load the next paragraph
-                    currentParagraphIndex = (currentParagraphIndex + 1) % jsonData.length;
-                    loadParagraph(currentParagraphIndex);
-                    document.getElementById('jsonIndexSelector').value = currentParagraphIndex;
-                }, 500); // Simulate a short delay to make it feel more realistic
             }
-        </script>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Reinforcement Learning Feedback</h1>
-            <div id="paragraphContainer">
-                <!-- Paragraph will be loaded here -->
-            </div>
-            <form id="feedbackForm">
-                <label for="jsonIndexSelector">Select Paragraph:</label>
-                <select id="jsonIndexSelector" name="jsonIndexSelector" class="classificationDropdown"></select>
-                <br>
-                <label for="feedback">Provide Feedback:</label>
-                <select class="classificationDropdown" id="feedback" name="feedback">
-                    <option value="agree">Agree</option>
-                    <option value="disagree">Disagree</option>
-                </select>
-                <button class="submitFeedback" type="submit">Submit</button>
-                <br>
-                <label for="name">Your Name:</label>
-                <input type="text" id="name" name="name" class="nameInput">
-            </form>
+        }
+
+        function loadMarkerFeedback(item) {
+            const container = document.getElementById('markerFeedbackContainer');
+            container.innerHTML = '';
+
+            for (let key in item) {
+                if (key.startsWith('marker') && item[key]) {
+                    const label = document.createElement('label');
+                    label.textContent = `Feedback for ${item[key]}: `;
+                    const select = document.createElement('select');
+                    select.className = 'markerFeedback';
+                    select.setAttribute('data-marker', key);
+
+                    const optionAgree = document.createElement('option');
+                    optionAgree.value = 'agree';
+                    optionAgree.text = 'Agree';
+                    select.appendChild(optionAgree);
+
+                    const optionDisagree = document.createElement('option');
+                    optionDisagree.value = 'disagree';
+                    optionDisagree.text = 'Disagree';
+                    select.appendChild(optionDisagree);
+
+                    container.appendChild(label);
+                    container.appendChild(select);
+                    container.appendChild(document.createElement('br'));
+                }
+            }
+        }
+
+        function submitFeedback() {
+            const feedback = {
+                name: document.getElementById('name').value,
+                feedback: {}
+            };
+
+            const markerFeedbackElements = document.querySelectorAll('.markerFeedback');
+            markerFeedbackElements.forEach(element => {
+                const markerKey = element.getAttribute('data-marker');
+                feedback.feedback[markerKey] = element.value;
+            });
+
+            if (!feedback.name) {
+                alert('Please fill in your name.');
+                return;
+            }
+
+            console.log(feedback);
+
+            setTimeout(() => {
+                alert('Feedback submitted successfully.');
+
+                currentParagraphIndex = (currentParagraphIndex + 1) % jsonData.length;
+                loadParagraph(currentParagraphIndex);
+                document.getElementById('jsonIndexSelector').value = currentParagraphIndex;
+            }, 500);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Reinforcement Learning Feedback</h1>
+        <div id="paragraphContainer">
+            <!-- Paragraph will be loaded here -->
         </div>
-    </body>
-    </html>
+        <form id="feedbackForm">
+            <label for="jsonIndexSelector">Select Paragraph:</label>
+            <select id="jsonIndexSelector" name="jsonIndexSelector" class="classificationDropdown"></select>
+            <br>
+            <div id="markerFeedbackContainer" class="markerFeedbackContainer">
+                <!-- Marker-specific feedback will be loaded here -->
+            </div>
+            <br>
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" class="nameInput">
+            <button class="submitFeedback" type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
