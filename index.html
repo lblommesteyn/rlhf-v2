@@ -76,7 +76,7 @@
         }
     </style>
     <script>
-        let jsonData = [
+ let jsonData = [
     {
         "company": "Debenhams",
         "year": "2018",
@@ -575,7 +575,7 @@
     }
 ]
 
-
+        
         const markerDefinitions = {
             "Purpose": "The company discusses explicitly about its 'purpose' (reason for being of the company) aiming towards a desired state in the future.",
             "Tensions": "The company discusses engaging in certain behaviors (systems thinking) despite potential unfavorable conditions.",
@@ -763,10 +763,33 @@
     <div class="container">
         <h1>Reinforcement Learning Feedback</h1>
 
+        <div id="paragraphContainer">
+            <!-- Paragraph will be loaded here -->
+        </div>
+        
+        <div id="markerButtonsContainer">
+            <!-- AI's coding will be loaded here -->
+        </div>
+
+        <div id="markerFeedbackContainer" class="markerFeedbackContainer">
+            <!-- Marker-specific feedback will be loaded here -->
+        </div>
+        
         <form id="addMarkerForm">
             <label for="newMarker">New Marker:</label>
             <select id="newMarker" name="newMarker" class="classificationDropdown"></select>
             <button class="addMarkerButton" type="submit">Add Marker</button>
+        </form>
+
+        <hr>
+
+        <form id="feedbackForm">
+            <label for="jsonIndexSelector">Select Paragraph:</label>
+            <select id="jsonIndexSelector" name="jsonIndexSelector" class="classificationDropdown"></select>
+            <br>
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" class="nameInput">
+            <button class="submitFeedback" type="submit">Submit</button>
         </form>
 
         <table>
@@ -780,25 +803,6 @@
                 <!-- Definitions will be populated here -->
             </tbody>
         </table>
-
-        <hr>
-
-        <div id="paragraphContainer">
-            <!-- Paragraph will be loaded here -->
-        </div>
-        
-        <form id="feedbackForm">
-            <label for="jsonIndexSelector">Select Paragraph:</label>
-            <select id="jsonIndexSelector" name="jsonIndexSelector" class="classificationDropdown"></select>
-            <br>
-            <div id="markerFeedbackContainer" class="markerFeedbackContainer">
-                <!-- Marker-specific feedback will be loaded here -->
-            </div>
-            <br>
-            <label for="name">Your Name:</label>
-            <input type="text" id="name" name="name" class="nameInput">
-            <button class="submitFeedback" type="submit">Submit</button>
-        </form>
     </div>
 </body>
 </html>
